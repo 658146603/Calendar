@@ -2,11 +2,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="${relativePackage}.${activityClass}" >
+    android:background="@color/md_blue_100"
+    tools:context=".MainActivity" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linearLayout1" >
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnCount="8" >
+            <Button android:layout_height="40dp" android:layout_columnWeight="0.5" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            
+            <Button android:layout_height="40dp" android:layout_columnWeight="0.5" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            <Button android:layout_height="40dp" android:layout_columnWeight="1" />
+            
+        </GridLayout>
+        
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/md_blue_300"
+        android:orientation="horizontal" >
+        
+    </LinearLayout>
 
 </RelativeLayout>

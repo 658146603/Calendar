@@ -1,0 +1,29 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jinghong.msgboard.MainActivity" >
+    
+    <item 
+        android:id="@+id/main_searchItem" 
+        android:title="查找" 
+        android:icon="@drawable/search_item"
+        android:showAsAction="ifRoom">
+        
+     </item>    
+        
+   <item 
+        android:id="@+id/main_addItem" 
+        android:title="添加" 
+        android:icon="@drawable/add_item"
+        android:showAsAction="ifRoom">
+        
+    </item>
+    
+   <item 
+        android:id="@+id/main_refreshItem" 
+        android:title="刷新" 
+        android:icon="@drawable/refresh_item"
+        android:showAsAction="ifRoom">
+        
+    </item>
+   
+</menu>
