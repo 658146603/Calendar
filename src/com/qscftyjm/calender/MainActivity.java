@@ -1,19 +1,34 @@
-package com.qscftyjm.clander;
+package com.qscftyjm.calender;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+	private Button button1;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
+		button1=(Button)findViewById(R.id.button1);
+		button1.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO 自动生成的方法存根
+				Intent intent = new Intent(MainActivity.this,CalenderActivity.class);
+				startActivity(intent);
+			}
+		});
 		
 		
 	}
