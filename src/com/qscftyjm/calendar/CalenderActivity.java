@@ -1,4 +1,4 @@
-package com.qscftyjm.calender;
+package com.qscftyjm.calendar;
 
 import android.app.Activity;
 import android.content.Context;

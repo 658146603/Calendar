@@ -1,4 +1,6 @@
-package com.qscftyjm.calender;
+package com.qscftyjm.calendar;
+
+import com.qscftyjm.calender.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,17 +21,17 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
-		button1=(Button)findViewById(R.id.button1);
-		button1.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO 自动生成的方法存根
-				Intent intent = new Intent(MainActivity.this,CalenderActivity.class);
-				startActivity(intent);
-			}
-		});
-		
+//		button1=(Button)findViewById(R.id.button1);
+//		button1.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO 自动生成的方法存根
+//				Intent intent = new Intent(MainActivity.this,CalenderActivity.class);
+//				startActivity(intent);
+//			}
+//		});
+//		
 		
 	}
 	
