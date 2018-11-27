@@ -50,6 +50,8 @@ public class MainActivity extends Activity {
 		switch(id){
 			case R.id.main_addItem:
 				Log.i("Clander","ADD");
+				Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+				startActivity(intent);
 				break;
 			case R.id.main_refreshItem:
 				Log.i("Clander","REFRESH");
