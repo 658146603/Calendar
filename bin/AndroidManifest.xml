@@ -24,7 +24,7 @@
         </activity>
         <activity
             android:name="com.qscftyjm.calendar.CalenderActivity"
-            android:label="@string/title_activity_clander" >
+            android:label="@string/title_activity_calendar" >
         </activity>
     </application>
 

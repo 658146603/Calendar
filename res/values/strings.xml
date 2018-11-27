@@ -298,7 +298,7 @@
     <color name="md_blue_grey_800">#37474F</color>
     <color name="md_blue_grey_900">#263238</color>
 
-    <string name="title_activity_clander">ClanderActivity</string>
+    <string name="title_activity_calendar">CalendarActivity</string>
     <string name="action_settings">Settings</string>
 
 </resources>
