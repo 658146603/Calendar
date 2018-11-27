@@ -74,7 +74,7 @@ public class CalenderActivity extends Activity {
 //            }
             canvas.drawColor(Color.TRANSPARENT,Mode.CLEAR);
             canvas.drawColor(0xFFBBDEFB,Mode.ADD);
-            canvas.drawRoundRect(2.5f, 2.5f, 100-2.5f, 200-2.5f, 20, 20, paint);
+            canvas.drawRoundRect(800+2.5f, 800+2.5f, 1000-2.5f, 1500-2.5f, 20, 20, paint);
 //            drawCircle(120,120,50,canvas,paint);
 //            drawCircle(250,120,50,canvas,paint);
 //            drawCircle(380,120,50,canvas,paint);
