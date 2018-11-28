@@ -38,7 +38,7 @@ public class CalenderActivity extends Activity {
 		Paint paint;
 		public ClanderView(Context context, int heigth, int width) {
 			super(context);
-			paint = new Paint(Paint.ANTI_ALIAS_FLAG);//在画图的时候，图片如果旋转或缩放之后，总是会出现那些华丽的锯齿。给Paint加上抗锯齿标志
+			paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setAntiAlias(true);
             paint.setColor(Color.BLUE);
             paint.setStrokeJoin(Paint.Join.ROUND);
