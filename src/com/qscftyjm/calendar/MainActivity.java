@@ -2,6 +2,7 @@ package com.qscftyjm.calendar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+import postutil.POSTUtli;
+import sqliteutil.SQLiteHelper;
 
 public class MainActivity extends Activity {
 
@@ -19,6 +22,13 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
+		//Toast.makeText(this, POSTUtli.CheckUserInfo(), Toast.LENGTH_SHORT).show();
+		
+		SQLiteHelper dbHelper=new SQLiteHelper(MainActivity.this, "calendar.db", null, 1);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		
+		
+		
 		button1=(Button)findViewById(R.id.button1);
 		button1.setOnClickListener(new OnClickListener() {
 			
