@@ -44,92 +44,100 @@ public class AccountChecker {
 			e.printStackTrace();
 		}
 		
-//		Map<String, Object> returnMap=new HashMap<String, Object>();
-//		returnMap.put("result", result);
-		
 		
 		return jsonObj;
 	}
 	
 	
 	
-	public static Map<String, Object> ChangePassword(String account, String oldPassword, String newPassword){
+	public static JSONObject ChangePassword(String account, String oldPassword, String newPassword){
 		
 		/*
 		 {
 			"Type": "user",
-			"Method": "register",
+			"Method": "changepassword",
 			"Data": {
-				"PassWord": "25D55AD283AA40AF464C76D713C7AD",
-				"ID": -1,
-				"Account": "NULL",
-				"UserName": "test_1",
-				"Priority": 0
+				"InnerData": {
+					"OldPassword": "25D55AD283AA40AF464C76D713C7AD",
+					"NewPassword": "96E79218965EB72C92A549DD5A33112"
+				},
+				"User": {
+					"PassWord": "25D55AD283AA40AF464C76D713C7AD",
+					"ID": -1,
+					"Account": "1006",
+					"UserName": "",
+					"Priority": 0
+				}
 			}
 		 }
 		*/
 		
 		
-		Map<String, Object> LoginInfo=new HashMap<String, Object>();
-		LoginInfo.put("Type", "user");
-		LoginInfo.put("Method", "changepassword");
+		Map<String, Object> UserInfo=new HashMap<String, Object>();
+		UserInfo.put("Type", "user");
+		UserInfo.put("Method", "changepassword");
 		Map<String, Object> Data=new HashMap<String, Object>();
-		Data.put("Account", account);
-		Data.put("PassWord", oldPassword);
-		Data.put("ID", -1);
-		Data.put("UserName", "");
-		Data.put("Priority", 0);
-		LoginInfo.put("Data", Data);
-		String result=POSTUtli.CheckUserInfo(new JSONObject(LoginInfo).toString()).toString();
+		Map<String, Object> InnerData=new HashMap<String, Object>();
+		InnerData.put("NewPassword", newPassword);
+		InnerData.put("OldPassword", oldPassword);
+		Map<String, Object> User=new HashMap<String, Object>();
+		User.put("PassWord", oldPassword);
+		User.put("ID", -1);
+		User.put("Account", account);
+		User.put("UserName", "");
+		User.put("Priority", 0);
+		Data.put("InnerData", InnerData);
+		Data.put("User", User);
+		UserInfo.put("Data", Data);
+		String result=POSTUtli.CheckUserInfo(new JSONObject(UserInfo).toString()).toString();
 		
-		Map<String, Object> returnMap=new HashMap<String, Object>();
-		returnMap.put("result", result);
-		
-		
-		return returnMap;
-	}
-	
-	public static JSONObject UserRegister(String UserName, String newPassword){
-		
-		/*
-		 {
-			"Type": "user",
-			"Method": "register",
-			"Data": {
-				"PassWord": "25D55AD283AA40AF464C76D713C7AD",
-				"ID": -1,
-				"Account": "NULL",
-				"UserName": "test_1",
-				"Priority": 0
-			}
-		 }
-		*/
-		
-		Map<String, Object> returnMap=new HashMap<String, Object>();
-		Map<String, Object> LoginInfo=new HashMap<String, Object>();
-		LoginInfo.put("Type", "user");
-		LoginInfo.put("Method", "register");
-		Map<String, Object> Data=new HashMap<String, Object>();
-//		Data.put("Account", account);
-//		Data.put("PassWord", oldPassword);
-		Data.put("ID", -1);
-		Data.put("UserName", "");
-		Data.put("Priority", 0);
-		LoginInfo.put("Data", Data);
-		String result=POSTUtli.CheckUserInfo(new JSONObject(LoginInfo).toString()).toString();
-		JSONObject LoginResult = null;
+		JSONObject jsonObj=null;
 		try {
-			LoginResult=new JSONObject(result);
-			int status=LoginResult.optInt("Status", -1);
+			jsonObj=new JSONObject(result);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		returnMap.put("result", result);
+		return jsonObj;
+	}
+	
+	public static JSONObject UserRegister(String UserName, String Password){
 		
+		/*
+		 {
+			"Type": "user",
+			"Method": "register",
+			"Data": {
+				"PassWord": "25D55AD283AA40AF464C76D713C7AD",
+				"ID": -1,
+				"Account": "NULL",
+				"UserName": "test_1",
+				"Priority": 0
+			}
+		 }
+		*/
 		
-		return LoginResult;
+		Map<String, Object> RegInfo=new HashMap<String, Object>();
+		RegInfo.put("Type", "user");
+		RegInfo.put("Method", "register");
+		Map<String, Object> Data=new HashMap<String, Object>();
+		Data.put("ID", -1);
+		Data.put("UserName", "");
+		Data.put("Priority", 0);
+		Data.put("PassWord", Password);
+		Data.put("Account", null);
+		RegInfo.put("Data", Data);
+		String result=POSTUtli.CheckUserInfo(new JSONObject(RegInfo).toString());
+		JSONObject jsonObj = null;
+		try {
+			jsonObj=new JSONObject(result);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return jsonObj;
 	}
 	
 	

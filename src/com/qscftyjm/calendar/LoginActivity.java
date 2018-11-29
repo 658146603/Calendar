@@ -45,9 +45,8 @@ public class LoginActivity extends Activity {
 						int status=result.optInt("Status");
 						//Toast.makeText(LoginActivity.this, String.valueOf(status), Toast.LENGTH_SHORT).show();
 						if(status==0) {
-							//Toast.makeText(LoginActivity.this, "登录成功！即将跳转到主界面......", Toast.LENGTH_SHORT).show();
 							JSONObject data=result.optJSONObject("Data");
-							
+							Toast.makeText(LoginActivity.this, "欢迎 "+data.optString("UserName")+" ！正在跳转到主界面......", Toast.LENGTH_SHORT).show();
 							Intent intent=new Intent(LoginActivity.this, MainActivity.class);
 //							Bundle bundle=new Bundle();
 //							bundle.putString("account", data.optString("Account"));
@@ -55,6 +54,7 @@ public class LoginActivity extends Activity {
 //							bundle.putString("username", data.optString("UserName"));
 //							intent.putExtras(bundle);
 							startActivity(intent);
+							finish();
 						}else if(status==1) {
 							Toast.makeText(LoginActivity.this, "用户名或密码错误，请重新输入", Toast.LENGTH_SHORT).show();
 						}else {
