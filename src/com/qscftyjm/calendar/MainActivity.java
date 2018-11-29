@@ -23,6 +23,19 @@ public class MainActivity extends Activity {
 		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		//Toast.makeText(this, POSTUtli.CheckUserInfo(), Toast.LENGTH_SHORT).show();
+//		Bundle bundle = this.getIntent().getExtras();
+//		if(bundle!=null&&bundle.containsKey("username")) {
+//			
+//			String uesrname=bundle.getString("username");
+//			String account=bundle.getString("account");
+//			String prority=bundle.getString("priority");
+//			Toast.makeText(this, 
+//					"µÇÂ¼³É¹¦£¡\nusername : "+uesrname
+//					+ "\naccount : "+account
+//					+ "\npriority : "+prority, Toast.LENGTH_SHORT).show();
+//			
+//		}
+		
 		
 		SQLiteHelper dbHelper=new SQLiteHelper(MainActivity.this, "calendar.db", null, 1);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();

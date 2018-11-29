@@ -3,11 +3,12 @@ package postutil;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AccountChecker {
 
-	public static Map<String, Object> UserLogin(String account, String password){
+	public static JSONObject UserLogin(String account, String password){
 		
 		/*
 		 {
@@ -34,14 +35,23 @@ public class AccountChecker {
 		Data.put("UserName", "");
 		Data.put("Priority", 0);
 		LoginInfo.put("Data", Data);
-		String result=POSTUtli.CheckUserInfo(new JSONObject(LoginInfo).toString()).toString();
+		String result=POSTUtli.CheckUserInfo(new JSONObject(LoginInfo).toString());
+		JSONObject jsonObj=null;
+		try {
+			jsonObj=new JSONObject(result);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		Map<String, Object> returnMap=new HashMap<String, Object>();
-		returnMap.put("result", result);
+//		Map<String, Object> returnMap=new HashMap<String, Object>();
+//		returnMap.put("result", result);
 		
 		
-		return returnMap;
+		return jsonObj;
 	}
+	
+	
 	
 	public static Map<String, Object> ChangePassword(String account, String oldPassword, String newPassword){
 		
@@ -79,7 +89,7 @@ public class AccountChecker {
 		return returnMap;
 	}
 	
-public static Map<String, Object> UserRegister(String UserName, String newPassword){
+	public static JSONObject UserRegister(String UserName, String newPassword){
 		
 		/*
 		 {
@@ -95,7 +105,7 @@ public static Map<String, Object> UserRegister(String UserName, String newPasswo
 		 }
 		*/
 		
-		
+		Map<String, Object> returnMap=new HashMap<String, Object>();
 		Map<String, Object> LoginInfo=new HashMap<String, Object>();
 		LoginInfo.put("Type", "user");
 		LoginInfo.put("Method", "register");
@@ -107,12 +117,19 @@ public static Map<String, Object> UserRegister(String UserName, String newPasswo
 		Data.put("Priority", 0);
 		LoginInfo.put("Data", Data);
 		String result=POSTUtli.CheckUserInfo(new JSONObject(LoginInfo).toString()).toString();
+		JSONObject LoginResult = null;
+		try {
+			LoginResult=new JSONObject(result);
+			int status=LoginResult.optInt("Status", -1);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		Map<String, Object> returnMap=new HashMap<String, Object>();
 		returnMap.put("result", result);
 		
 		
-		return returnMap;
+		return LoginResult;
 	}
 	
 	

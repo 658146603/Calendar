@@ -1,5 +1,7 @@
 package com.qscftyjm.calendar;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,10 +38,31 @@ public class LoginActivity extends Activity {
 				if(!input_account.equals("")&&!input_password.equals("")) {
 					
 					input_password=MD5Util.getMd5(input_password);
-					Toast.makeText(LoginActivity.this, "Account : "+input_account+" Password : "+input_password, Toast.LENGTH_SHORT).show();
-					//Map<String, Object> LoginResult=AccountChecker.UserLogin(input_account, input_password);
-					//Toast.makeText(LoginActivity.this, (String)LoginResult.get("result"), Toast.LENGTH_SHORT).show();
-					Toast.makeText(LoginActivity.this, (String)AccountChecker.UserLogin(input_account, input_password).get("result"), Toast.LENGTH_SHORT).show();
+					//Toast.makeText(LoginActivity.this, "Account : "+input_account+" Password : "+input_password, Toast.LENGTH_SHORT).show();
+					JSONObject result=AccountChecker.UserLogin(input_account, input_password);
+					
+					if(result!=null) {
+						int status=result.optInt("Status");
+						//Toast.makeText(LoginActivity.this, String.valueOf(status), Toast.LENGTH_SHORT).show();
+						if(status==0) {
+							//Toast.makeText(LoginActivity.this, "登录成功！即将跳转到主界面......", Toast.LENGTH_SHORT).show();
+							JSONObject data=result.optJSONObject("Data");
+							
+							Intent intent=new Intent(LoginActivity.this, MainActivity.class);
+//							Bundle bundle=new Bundle();
+//							bundle.putString("account", data.optString("Account"));
+//							bundle.putString("priority", data.optString("Priority"));
+//							bundle.putString("username", data.optString("UserName"));
+//							intent.putExtras(bundle);
+							startActivity(intent);
+						}else if(status==1) {
+							Toast.makeText(LoginActivity.this, "用户名或密码错误，请重新输入", Toast.LENGTH_SHORT).show();
+						}else {
+							Toast.makeText(LoginActivity.this, "未知错误1，请稍后再试", Toast.LENGTH_SHORT).show();
+						}
+					} else {
+						Toast.makeText(LoginActivity.this, "未知错误0，请稍后再试", Toast.LENGTH_SHORT).show();
+					}
 				}else {
 					Toast.makeText(LoginActivity.this, "用户名或密码不能为空！", Toast.LENGTH_SHORT).show();
 				}
