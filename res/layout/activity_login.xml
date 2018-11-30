@@ -55,7 +55,8 @@
                 android:hint="在这里输入你的账号"
                 android:inputType="text"
                 android:maxLines="1"
-                android:padding="5dp" >
+                android:padding="5dp"
+                android:text="1133" >
             </EditText>
         </LinearLayout>
 
@@ -86,7 +87,8 @@
                 android:hint="在这里输入你的密码"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:padding="5dp" >
+                android:padding="5dp"
+                android:text="123456" >
             </EditText>
         </LinearLayout>
 

@@ -4,7 +4,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,8 +16,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 import postutil.AsynTaskUtil;
 import postutil.AsynTaskUtil.AsynNetUtils.Callback;
+import sqliteutil.SQLiteHelper;
 import tools.MD5Util;
 import tools.ParamToJSON;
+import tools.TimeUtil;
 
 public class LoginActivity extends Activity {
 
@@ -42,8 +47,8 @@ public class LoginActivity extends Activity {
 					
 					input_password=MD5Util.getMd5(input_password);
 					//Toast.makeText(LoginActivity.this, "Account : "+input_account+" Password : "+input_password, Toast.LENGTH_SHORT).show();
-					String account =input_account;
-					String password=input_password;
+					final String account =input_account;
+					final String password=input_password;
 
 					
 					AsynTaskUtil.AsynNetUtils.post("http://192.168.42.252:8080/CalendarServer/CalendarPost", ParamToJSON.formLoginJson(account, password), new Callback() {
@@ -62,7 +67,27 @@ public class LoginActivity extends Activity {
 										//Toast.makeText(LoginActivity.this, String.valueOf(status), Toast.LENGTH_SHORT).show();
 										if(status==0) {
 											JSONObject data=jsonObj.optJSONObject("Data");
+											
 											Toast.makeText(LoginActivity.this, "欢迎 "+data.optString("UserName")+" ！正在跳转到主界面......", Toast.LENGTH_SHORT).show();
+											SQLiteHelper sqLiteHelper=new SQLiteHelper(LoginActivity.this, "calendar.db", null, 1);
+											SQLiteDatabase database=sqLiteHelper.getWritableDatabase();
+											
+											Cursor cursor = database.query("logininfo", new String[] {"id","username","account"}, new String("account = ?"), new String[] { account }, null, null, null, null);
+											int count=0;
+											if(cursor.moveToFirst()) {
+												count=cursor.getCount();
+												if(count>0) {
+													database.execSQL("delete from logininfo where account = ?",new String[] { account });
+												}
+											}
+											cursor.close();
+											ContentValues values = new ContentValues();
+							                values.put("account",account);
+							                values.put("password",password);
+							                values.put("username",data.optString("UserName","000000"));
+							                values.put("priority",data.optInt("Priority", 0));
+							                values.put("lastchecktime",TimeUtil.getTime());
+							                long id=database.insert("logininfo",null,values);//插入数据
 											Intent intent=new Intent(LoginActivity.this, MainActivity.class);
 											startActivity(intent);
 											finish();
