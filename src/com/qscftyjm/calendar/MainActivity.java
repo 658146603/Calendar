@@ -71,8 +71,8 @@ public class MainActivity extends Activity {
 		int id = item.getItemId();
 		switch(id){
 			case R.id.main_addItem:
-				Log.i("Clander","ADD");
-				Intent intent=new Intent(MainActivity.this,LoginActivity.class);
+				Log.i("Clander","UserInfo");
+				Intent intent=new Intent(MainActivity.this,UserInfoActivity.class);
 				startActivity(intent);
 				break;
 			case R.id.main_refreshItem:

@@ -1,16 +1,72 @@
 package com.qscftyjm.calendar;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import sqliteutil.SQLiteHelper;
 
 public class UserInfoActivity extends Activity {
 
+	private Button btn_gotoLogin;
+	private LinearLayout LinearLocal;
+	
+	
+	private LinearLayout LinearLogin;
+	private TextView tv_userlist;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_userinfo);
+		btn_gotoLogin=(Button)findViewById(R.id.btn_to_login_page);
+		LinearLocal=(LinearLayout)findViewById(R.id.userinfo_local);
+		LinearLogin=(LinearLayout)findViewById(R.id.userinfo_login);
+		tv_userlist=(TextView)findViewById(R.id.tv_user_list);
+		String UserList="用户列表：\n";
+		SQLiteHelper sqLiteHelper=new SQLiteHelper(UserInfoActivity.this, "calendar.db", null, 1);
+		SQLiteDatabase database=sqLiteHelper.getWritableDatabase();
+		
+		Cursor cursor = database.query("logininfo", new String[] {"id","username","account"}, null, null, null, null, null, null);
+		int count=0;
+		if(cursor.moveToFirst()) {
+			count=cursor.getCount();
+			if(count>0) {
+				LinearLocal.setVisibility(View.GONE);
+				LinearLogin.setVisibility(View.VISIBLE);
+				do {
+					UserList+=cursor.getString(1)+"\n";
+					
+				} while(cursor.moveToNext());
+				tv_userlist.setText(UserList);
+			}else {
+				LinearLogin.setVisibility(View.GONE);
+				LinearLocal.setVisibility(View.VISIBLE);
+			}
+		}
+		
+		
+		
+		btn_gotoLogin.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				Intent intent=new Intent(UserInfoActivity.this, LoginActivity.class);
+				startActivity(intent);
+				
+			}
+		});
+		
 	}
 
 	@Override

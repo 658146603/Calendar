@@ -9,30 +9,60 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-        <LinearLayout 
+
+        <LinearLayout
             android:id="@+id/userinfo_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:visibility="gone" >
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:text="btn1"
                 android:textSize="12sp" />
+            
+            <TextView
+                android:id="@+id/tv_user_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="用户列表：\n" />
+            
+            
         </LinearLayout>
         
-        <LinearLayout 
+        <LinearLayout
             android:id="@+id/userinfo_local"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:visibility="visible" >
+            
+            <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_gravity="center_horizontal"
+		        android:gravity="center_horizontal"
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="30dp"
+		        android:layout_marginBottom="20dp"
+		        android:padding="10dp"
+		        android:text="您还未登录，日程信息只能在本地保存\n\n建议您登录您的账号\n如果您还没有账号，也可以点击下方按钮进入引导页面注册" />
+            
             <Button
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/btn_to_login_page"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:text="btn2"
-                android:textSize="12sp" />
+                android:text="点击这里登录/注册您的账号"
+                android:textSize="12sp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                android:background="@drawable/radius" />
+            
+            
         </LinearLayout>
     </FrameLayout>
 
