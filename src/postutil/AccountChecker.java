@@ -6,8 +6,13 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import postutil.AsynTaskUtil.AsynNetUtils.Callback;
+
 public class AccountChecker {
 
+	static String result=null;
+	static JSONObject jsonObj=null;
+	
 	public static JSONObject UserLogin(String account, String password){
 		
 		/*
@@ -23,7 +28,8 @@ public class AccountChecker {
 			}
 		 }
 		*/
-		
+		result=null;
+		jsonObj=null;
 		
 		Map<String, Object> LoginInfo=new HashMap<String, Object>();
 		LoginInfo.put("Type", "user");
@@ -35,17 +41,28 @@ public class AccountChecker {
 		Data.put("UserName", "");
 		Data.put("Priority", 0);
 		LoginInfo.put("Data", Data);
-		String result=POSTUtli.CheckUserInfo(new JSONObject(LoginInfo).toString());
-		JSONObject jsonObj=null;
-		try {
-			jsonObj=new JSONObject(result);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//String result=POSTUtli.CheckUserInfo(new JSONObject(LoginInfo).toString());
+		
+		/**/AsynTaskUtil.AsynNetUtils.post("http://192.168.42.252:8080/CalendarServer/CalendarPost", "json="+new JSONObject(LoginInfo).toString(), new Callback() {
+			
+			@Override
+			public void onResponse(String response) {
+				// TODO Auto-generated method stub
+				result=response;
+				
+				try {
+					jsonObj=new JSONObject(result);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		});
 		
 		
 		return jsonObj;
+		
 	}
 	
 	
@@ -123,7 +140,7 @@ public class AccountChecker {
 		RegInfo.put("Method", "register");
 		Map<String, Object> Data=new HashMap<String, Object>();
 		Data.put("ID", -1);
-		Data.put("UserName", "");
+		Data.put("UserName", UserName);
 		Data.put("Priority", 0);
 		Data.put("PassWord", Password);
 		Data.put("Account", null);

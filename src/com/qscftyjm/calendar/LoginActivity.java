@@ -1,5 +1,9 @@
 package com.qscftyjm.calendar;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -11,7 +15,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import postutil.AccountChecker;
+import postutil.AsynTaskUtil;
+import postutil.AsynTaskUtil.AsynNetUtils.Callback;
 import tools.MD5Util;
+import tools.ParamToJSON;
 
 public class LoginActivity extends Activity {
 
@@ -39,30 +46,64 @@ public class LoginActivity extends Activity {
 					
 					input_password=MD5Util.getMd5(input_password);
 					//Toast.makeText(LoginActivity.this, "Account : "+input_account+" Password : "+input_password, Toast.LENGTH_SHORT).show();
-					JSONObject result=AccountChecker.UserLogin(input_account, input_password);
+					//=AccountChecker.UserLogin(input_account, input_password);
+					String account =input_account;
+					String password=input_password;
 					
-					if(result!=null) {
-						int status=result.optInt("Status");
-						//Toast.makeText(LoginActivity.this, String.valueOf(status), Toast.LENGTH_SHORT).show();
-						if(status==0) {
-							JSONObject data=result.optJSONObject("Data");
-							Toast.makeText(LoginActivity.this, "欢迎 "+data.optString("UserName")+" ！正在跳转到主界面......", Toast.LENGTH_SHORT).show();
-							Intent intent=new Intent(LoginActivity.this, MainActivity.class);
-//							Bundle bundle=new Bundle();
-//							bundle.putString("account", data.optString("Account"));
-//							bundle.putString("priority", data.optString("Priority"));
-//							bundle.putString("username", data.optString("UserName"));
-//							intent.putExtras(bundle);
-							startActivity(intent);
-							finish();
-						}else if(status==1) {
-							Toast.makeText(LoginActivity.this, "用户名或密码错误，请重新输入", Toast.LENGTH_SHORT).show();
-						}else {
-							Toast.makeText(LoginActivity.this, "未知错误1，请稍后再试", Toast.LENGTH_SHORT).show();
+					
+//					Map<String, Object> LoginInfo=new HashMap<String, Object>();
+//					LoginInfo.put("Type", "user");
+//					LoginInfo.put("Method", "login");
+//					Map<String, Object> Data=new HashMap<String, Object>();
+//					Data.put("Account", account);
+//					Data.put("PassWord", password);
+//					Data.put("ID", -1);
+//					Data.put("UserName", "");
+//					Data.put("Priority", 0);
+//					LoginInfo.put("Data", Data);
+					
+					//String result=POSTUtli.CheckUserInfo(new JSONObject(LoginInfo).toString());
+					
+					/**/AsynTaskUtil.AsynNetUtils.post("http://192.168.42.252:8080/CalendarServer/CalendarPost", ParamToJSON.formLoginJson(account, password)/*new JSONObject(LoginInfo).toString()*/, new Callback() {
+						
+						@Override
+						public void onResponse(String response) {
+							// TODO Auto-generated method stub
+							String result=response;
+							//Toast.makeText(LoginActivity.this, result, Toast.LENGTH_SHORT).show();
+							JSONObject jsonObj=null;
+							if(response!=null) {
+								try {
+									jsonObj=new JSONObject(response);
+									if(result!=null) {
+										int status=jsonObj.optInt("Status");
+										//Toast.makeText(LoginActivity.this, String.valueOf(status), Toast.LENGTH_SHORT).show();
+										if(status==0) {
+											JSONObject data=jsonObj.optJSONObject("Data");
+											Toast.makeText(LoginActivity.this, "欢迎 "+data.optString("UserName")+" ！正在跳转到主界面......", Toast.LENGTH_SHORT).show();
+											Intent intent=new Intent(LoginActivity.this, MainActivity.class);
+											startActivity(intent);
+											finish();
+										}else if(status==1) {
+											Toast.makeText(LoginActivity.this, "用户名或密码错误，请重新输入", Toast.LENGTH_SHORT).show();
+										}else {
+											Toast.makeText(LoginActivity.this, "未知错误1，请稍后再试", Toast.LENGTH_SHORT).show();
+										}
+									} else {
+										Toast.makeText(LoginActivity.this, "未知错误0，请稍后再试", Toast.LENGTH_SHORT).show();
+									}
+									
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
+							}else {
+								Toast.makeText(LoginActivity.this, "网络错误，请检查你的网络连接", Toast.LENGTH_SHORT).show();
+							}
+							
 						}
-					} else {
-						Toast.makeText(LoginActivity.this, "未知错误0，请稍后再试", Toast.LENGTH_SHORT).show();
-					}
+					});
 				}else {
 					Toast.makeText(LoginActivity.this, "用户名或密码不能为空！", Toast.LENGTH_SHORT).show();
 				}
@@ -85,7 +126,7 @@ public class LoginActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(LoginActivity.this, "忘记密码-正在跳转...", Toast.LENGTH_SHORT).show();
+				Toast.makeText(LoginActivity.this, "忘记密码-该功能将在后续推出，敬请期待......", Toast.LENGTH_SHORT).show();
 				
 			}
 		});
