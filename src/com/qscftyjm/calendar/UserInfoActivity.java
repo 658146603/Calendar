@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import sqliteutil.SQLiteHelper;
 
 public class UserInfoActivity extends Activity {
@@ -82,8 +83,18 @@ public class UserInfoActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch (id) {
+		case R.id.action_settings:
+			Toast.makeText(UserInfoActivity.this, "…Ë÷√", Toast.LENGTH_SHORT).show();
+			break;
+			
+		case R.id.menu_user_info_add_user:
+			Intent intent1=new Intent(UserInfoActivity.this, LoginActivity.class);
+			startActivity(intent1);
+			break;
+
+		default:
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

@@ -6,6 +6,116 @@
     android:orientation="vertical"
     tools:context="com.qscftyjm.calendar.RegisterActivity" >
 
-    
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal" >
+
+        <LinearLayout
+            android:id="@+id/account_linearlayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/radius_left"
+                android:gravity="center"
+                android:text="用户名"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/register_username"
+                android:layout_width="216dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="24dp"
+                android:background="@drawable/radius_right"
+                android:hint="在这里输入你的用户名"
+                android:inputType="text"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:text="helloworld" >
+            </EditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_marginTop="30dp" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/radius_left"
+                android:gravity="center"
+                android:text="密码"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/register_password"
+                android:layout_width="216dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="24dp"
+                android:background="@drawable/radius_right"
+                android:hint="在这里输入你的密码"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:text="000000" >
+            </EditText>
+        </LinearLayout>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp" >
+
+            <TextView
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/radius_left"
+                android:gravity="center"
+                android:text="确认密码"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/register_password_confirm"
+                android:layout_width="216dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="24dp"
+                android:background="@drawable/radius_right"
+                android:hint="再次确认你的密码"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:padding="5dp"
+                android:text="000000" >
+            </EditText>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/register_submit"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="40dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/radius"
+            android:text="提交注册信息" />
+        
+    </LinearLayout>
     
 </LinearLayout>
