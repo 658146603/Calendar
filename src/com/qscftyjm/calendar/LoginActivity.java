@@ -1,8 +1,5 @@
 package com.qscftyjm.calendar;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import postutil.AccountChecker;
 import postutil.AsynTaskUtil;
 import postutil.AsynTaskUtil.AsynNetUtils.Callback;
 import tools.MD5Util;
@@ -46,25 +42,11 @@ public class LoginActivity extends Activity {
 					
 					input_password=MD5Util.getMd5(input_password);
 					//Toast.makeText(LoginActivity.this, "Account : "+input_account+" Password : "+input_password, Toast.LENGTH_SHORT).show();
-					//=AccountChecker.UserLogin(input_account, input_password);
 					String account =input_account;
 					String password=input_password;
+
 					
-					
-//					Map<String, Object> LoginInfo=new HashMap<String, Object>();
-//					LoginInfo.put("Type", "user");
-//					LoginInfo.put("Method", "login");
-//					Map<String, Object> Data=new HashMap<String, Object>();
-//					Data.put("Account", account);
-//					Data.put("PassWord", password);
-//					Data.put("ID", -1);
-//					Data.put("UserName", "");
-//					Data.put("Priority", 0);
-//					LoginInfo.put("Data", Data);
-					
-					//String result=POSTUtli.CheckUserInfo(new JSONObject(LoginInfo).toString());
-					
-					/**/AsynTaskUtil.AsynNetUtils.post("http://192.168.42.252:8080/CalendarServer/CalendarPost", ParamToJSON.formLoginJson(account, password)/*new JSONObject(LoginInfo).toString()*/, new Callback() {
+					AsynTaskUtil.AsynNetUtils.post("http://192.168.42.252:8080/CalendarServer/CalendarPost", ParamToJSON.formLoginJson(account, password), new Callback() {
 						
 						@Override
 						public void onResponse(String response) {
