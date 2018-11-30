@@ -1,7 +1,12 @@
 package com.qscftyjm.calendar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +16,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+import postutil.AsynTaskUtil.AsynNetUtils;
+import postutil.AsynTaskUtil.AsynNetUtils.Callback;
 import sqliteutil.SQLiteHelper;
+import tools.ParamToJSON;
+import tools.TimeUtil;
 
 public class MainActivity extends Activity {
 
@@ -21,7 +30,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
-		//Toast.makeText(this, POSTUtli.CheckUserInfo(), Toast.LENGTH_SHORT).show();
 //		Bundle bundle = this.getIntent().getExtras();
 //		if(bundle!=null&&bundle.containsKey("username")) {
 //			
@@ -37,8 +45,63 @@ public class MainActivity extends Activity {
 		
 		
 		SQLiteHelper dbHelper=new SQLiteHelper(MainActivity.this, "calendar.db", null, 1);
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		
+		final SQLiteDatabase database = dbHelper.getWritableDatabase();
+		Cursor cursor = database.query("logininfo", new String[] {"account","password","lastchecktime"}, null, null, null, null, null, null);
+		int count=0;
+		if(cursor.moveToFirst()) {
+			count=cursor.getCount();
+			if(count>0) {
+				do {
+					final String account=cursor.getString(0);
+					String password=cursor.getString(1);
+					if(TimeUtil.checkIsOverTime(cursor.getString(2))) {
+						Toast.makeText(MainActivity.this, "用户登录数据 "+account+" 已过期，无法进行云同步", Toast.LENGTH_LONG).show();
+						password="";
+						//continue;
+					}
+					AsynNetUtils.post("http://192.168.42.252:8080/CalendarServer/CalendarPost", ParamToJSON.formLoginJson(account, password), new Callback() {
+
+						@Override
+						public void onResponse(String response) {
+							// TODO Auto-generated method stub
+							JSONObject jsonObj=null;
+							if(response!=null) {
+								try {
+									String result=response;
+									jsonObj=new JSONObject(result);
+									if(jsonObj.optInt("Status",-1)==0) {
+										ContentValues values=new ContentValues();
+										values.put("lastchecktime", TimeUtil.getTime());
+										database.update("logininfo", values, "account = ?", new String[] { account });
+										
+									} else {
+										Toast.makeText(MainActivity.this, "用户 "+account+" 的账号已过期，即将删除关于 "+account+" 的所有本地数据", Toast.LENGTH_LONG).show();
+										database.execSQL("delete from logininfo where account = ?", new String[] { account });
+									}
+								} catch (JSONException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+							
+							
+						}
+					});
+					
+				} while(cursor.moveToNext());
+				cursor.close();
+				
+//				cursor=database.query("logininfo", new String[] { "lastchecktime" }, null, null, null, null, null, null);
+//				if(cursor.moveToFirst()) {
+//					int ct=cursor.getCount();
+//					String lastchecktime=null;
+//					do {
+//						lastchecktime=cursor.getString(0);
+//					}while(cursor.moveToNext());
+//				}
+//				cursor.close();
+			}
+		}
 		
 		
 		button1=(Button)findViewById(R.id.button1);

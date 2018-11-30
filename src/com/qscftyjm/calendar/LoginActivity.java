@@ -92,7 +92,7 @@ public class LoginActivity extends Activity {
 											startActivity(intent);
 											finish();
 										}else if(status==1) {
-											Toast.makeText(LoginActivity.this, "用户名或密码错误，请重新输入", Toast.LENGTH_SHORT).show();
+											Toast.makeText(LoginActivity.this, "账号或密码错误，请重新输入", Toast.LENGTH_SHORT).show();
 										}else {
 											Toast.makeText(LoginActivity.this, "未知错误1，请稍后再试", Toast.LENGTH_SHORT).show();
 										}
