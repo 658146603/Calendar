@@ -3,17 +3,17 @@
     tools:context="com.jinghong.msgboard.MainActivity" >
     
     <item 
-        android:id="@+id/main_searchItem" 
-        android:title="查找" 
-        android:icon="@drawable/search_item"
+        android:id="@+id/main_addItem" 
+        android:title="添加事件" 
+        android:icon="@drawable/add_item"
         android:showAsAction="ifRoom">
         
      </item>    
         
    <item 
-        android:id="@+id/main_addItem" 
-        android:title="添加" 
-        android:icon="@drawable/add_item"
+        android:id="@+id/main_userItem" 
+        android:title="用户列表" 
+        android:icon="@drawable/user"
         android:showAsAction="ifRoom">
         
     </item>

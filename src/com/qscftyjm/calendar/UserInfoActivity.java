@@ -18,12 +18,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-import listviewadapter.ListViewUtil;
 import listviewadapter.UserInfoAdapter;
 import sqliteutil.SQLiteHelper;
-import tools.TimeUtil;
 
 public class UserInfoActivity extends Activity {
 
@@ -123,7 +120,7 @@ public class UserInfoActivity extends Activity {
 			Toast.makeText(UserInfoActivity.this, "…Ë÷√", Toast.LENGTH_SHORT).show();
 			break;
 			
-		case R.id.menu_user_info_add_user:
+		case R.id.user_info_add_user:
 			Intent intent1=new Intent(UserInfoActivity.this, LoginActivity.class);
 			startActivity(intent1);
 			break;

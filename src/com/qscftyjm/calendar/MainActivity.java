@@ -148,16 +148,18 @@ public class MainActivity extends Activity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		switch(id){
-			case R.id.main_addItem:
+			case R.id.main_userItem:
 				Log.i("Clander","UserInfo");
 				Intent intent=new Intent(MainActivity.this,UserInfoActivity.class);
 				startActivity(intent);
 				break;
+			
+			case R.id.main_addItem:
+				Log.i("Clander","ADD");
+				break;
+				
 			case R.id.main_refreshItem:
 				Log.i("Clander","REFRESH");
-				break;
-			case R.id.main_searchItem:
-				Log.i("Clander","SEARCH");
 				break;
 		}
 		
