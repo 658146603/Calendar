@@ -9,11 +9,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -31,7 +35,9 @@ public class UserInfoActivity extends Activity {
 	private LinearLayout LinearLogin;
 	private ListView list_userinfo;
 	private UserInfoAdapter adapter;
-	
+	private ArrayList<Map<String, Object>> userArray;
+	SQLiteHelper sqLiteHelper=null;
+	SQLiteDatabase database=null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,9 +46,9 @@ public class UserInfoActivity extends Activity {
 		LinearLocal=(LinearLayout)findViewById(R.id.userinfo_local);
 		LinearLogin=(LinearLayout)findViewById(R.id.userinfo_login);
 		list_userinfo=(ListView)findViewById(R.id.list_userinfo);
-		SQLiteHelper sqLiteHelper=new SQLiteHelper(UserInfoActivity.this, "calendar.db", null, 1);
-		SQLiteDatabase database=sqLiteHelper.getWritableDatabase();
 		
+		sqLiteHelper=new SQLiteHelper(UserInfoActivity.this, "calendar.db", null, 1);
+		database=sqLiteHelper.getWritableDatabase();
 		Cursor cursor = database.query("logininfo", new String[] { "id", "account", "username", "priority", "lastchecktime","password" }, null, null, null, null, null, null);
 		int count=0;
 		if(cursor.moveToFirst()) {
@@ -50,7 +56,7 @@ public class UserInfoActivity extends Activity {
 			if(count>0) {
 				LinearLocal.setVisibility(View.GONE);
 				LinearLogin.setVisibility(View.VISIBLE);
-				ArrayList<Map<String, Object>> userArray=new ArrayList<Map<String, Object>>();
+				userArray=new ArrayList<Map<String, Object>>();
 				do {
 					int id=cursor.getInt(0);
 					String account=cursor.getString(1);
@@ -75,9 +81,21 @@ public class UserInfoActivity extends Activity {
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 						// TODO Auto-generated method stub
-						View v=view;
+						//View v=view;
 						Toast.makeText(UserInfoActivity.this, "第 "+position+" 项被点击", Toast.LENGTH_SHORT).show();
 						
+					}
+				});
+				list_userinfo.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+					
+					@Override
+					public void onCreateContextMenu(ContextMenu menu, View v,
+							ContextMenuInfo menuInfo) {
+						// TODO 自动生成的方法存根
+						menu.setHeaderTitle("长按菜单");
+						menu.add(0, 0, 0, "查看详细信息");
+						menu.add(0, 1, 0, "添加日程");
+						menu.add(0, 2, 0, "注销登录");
 					}
 				});
 			}else {
@@ -109,6 +127,30 @@ public class UserInfoActivity extends Activity {
 		return true;
 	}
 
+	@Override
+	public boolean onContextItemSelected(MenuItem menuItem){
+		
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) menuItem.getMenuInfo();
+		int index=(int) info.id;
+		//Toast.makeText(UserInfoActivity.this, "长按点击了第"+index+"条的第"+menuItem.getItemId()+"项", Toast.LENGTH_SHORT).show();
+		String optAccount=userArray.get(index).get("account").toString();
+		switch (menuItem.getItemId()) {
+			case 0:
+				Toast.makeText(UserInfoActivity.this, "account : "+optAccount, Toast.LENGTH_SHORT).show();
+				
+				break;
+			case 1:
+				Toast.makeText(UserInfoActivity.this, "1", Toast.LENGTH_SHORT).show();
+				break;
+			case 2:
+				database.execSQL("delete from logininfo where account = ?", new String[] { optAccount });
+				Toast.makeText(UserInfoActivity.this, "注销成功", Toast.LENGTH_SHORT).show();
+				break;
+		}
+		
+		return super.onContextItemSelected(menuItem);
+	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
