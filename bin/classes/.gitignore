@@ -1,2 +1,7 @@
 /com/
+/.gitignore
+/calendarView/
 /listviewadapter/
+/postutil/
+/sqliteutil/
+/tools/
