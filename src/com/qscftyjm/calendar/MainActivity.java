@@ -78,6 +78,7 @@ public class MainActivity extends Activity {
 							if(response!=null) {
 								try {
 									String result=response;
+									
 									jsonObj=new JSONObject(result);
 									if(jsonObj.optInt("Status",-1)==0) {
 										ContentValues values=new ContentValues();
@@ -94,6 +95,8 @@ public class MainActivity extends Activity {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
+							} else {
+								Log.d("Calendar", "Õ¯¬Á“Ï≥£");
 							}
 							
 							

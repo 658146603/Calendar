@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+     >
+    
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" 
+        android:paddingLeft="10dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:paddingTop="5dp"
+        android:background="@drawable/radius_top">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/img_default" 
+            android:contentDescription="ICON"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="5dp"/>
+
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:textSize="28sp" 
+                android:text="PIKACHU"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="match_parent"
+                android:layout_height="20dp" 
+                android:layout_marginTop="16dp"
+                android:text="2018-11-22 7:28"
+                android:textSize="16sp"
+                android:textColor="#cccccc"/>
+
+        </LinearLayout>
+
+	</LinearLayout>
+	<TextView 
+	    android:id="@+id/content"
+	    android:layout_width="match_parent"
+	    android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_height="100dp"
+        android:textSize="20sp" 
+        android:text="text"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/radius_bottom"/>
+
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="50dp"
+	    android:orientation="horizontal"
+	    android:visibility="gone" >
+	    <Button
+	    android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:text="转发"/>
+	    <Button
+	    android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:text="回复"/>
+	    <Button
+	    android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:text="点赞"/>
+	</LinearLayout>
+</LinearLayout>
