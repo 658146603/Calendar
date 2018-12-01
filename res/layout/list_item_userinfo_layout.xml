@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        <TextView
+            android:id="@+id/user_id"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="24sp"
+            android:text="id : 0" />
+        
+        <TextView
+            android:id="@+id/user_username"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="24sp"
+            android:text="username : wcf" />
+        
+        <TextView
+            android:id="@+id/user_account"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="24sp"
+            android:text="account : 1100" />
+        
+        <TextView
+            android:id="@+id/user_priority"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="24sp"
+            android:text="priority : 0" />
+        
+        <TextView
+            android:id="@+id/user_lastchecktime"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textSize="20sp"
+            android:text="lastchecktime : 1970-01-01 08:00" />
+
+        <Button
+            android:id="@+id/user_show_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="显示详情" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/user_showdetail"
+        android:orientation="vertical"
+        android:layout_height="150dp"
+        android:layout_width="match_parent"
+        android:visibility="gone" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Detail" />
+    </LinearLayout>
+    
+</LinearLayout>

@@ -1,5 +1,9 @@
 package com.qscftyjm.calendar;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,8 +15,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import listviewadapter.ListViewAdapter;
 import sqliteutil.SQLiteHelper;
 
 public class UserInfoActivity extends Activity {
@@ -22,7 +28,7 @@ public class UserInfoActivity extends Activity {
 	
 	
 	private LinearLayout LinearLogin;
-	private TextView tv_userlist;
+	private ListView list_userinfo;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,23 +37,33 @@ public class UserInfoActivity extends Activity {
 		btn_gotoLogin=(Button)findViewById(R.id.btn_to_login_page);
 		LinearLocal=(LinearLayout)findViewById(R.id.userinfo_local);
 		LinearLogin=(LinearLayout)findViewById(R.id.userinfo_login);
-		tv_userlist=(TextView)findViewById(R.id.tv_user_list);
-		String UserList="用户列表：\n";
+		list_userinfo=(ListView)findViewById(R.id.list_userinfo);
 		SQLiteHelper sqLiteHelper=new SQLiteHelper(UserInfoActivity.this, "calendar.db", null, 1);
 		SQLiteDatabase database=sqLiteHelper.getWritableDatabase();
 		
-		Cursor cursor = database.query("logininfo", new String[] {"id","username","account"}, null, null, null, null, null, null);
+		Cursor cursor = database.query("logininfo", new String[] { "id", "account", "username", "priority", "lastchecktime" }, null, null, null, null, null, null);
 		int count=0;
 		if(cursor.moveToFirst()) {
 			count=cursor.getCount();
 			if(count>0) {
 				LinearLocal.setVisibility(View.GONE);
 				LinearLogin.setVisibility(View.VISIBLE);
+				ArrayList<Map<String, Object>> userArray=new ArrayList<Map<String, Object>>();
 				do {
-					UserList+=cursor.getString(1)+"\n";
-					
+					int id=cursor.getInt(0);
+					String account=cursor.getString(1);
+					String username=cursor.getString(2);
+					int priority=cursor.getInt(3);
+					String lastchecktime=cursor.getString(4);
+					Map<String, Object> tempMap=new HashMap<String, Object>();
+					tempMap.put("id", id);
+					tempMap.put("account", account);
+					tempMap.put("username", username);
+					tempMap.put("priority", priority);
+					tempMap.put("lastchecktime", lastchecktime);
+					userArray.add(tempMap);
+					list_userinfo=ListViewAdapter.UserInfoAdapter(UserInfoActivity.this, list_userinfo, userArray);
 				} while(cursor.moveToNext());
-				tv_userlist.setText(UserList);
 			}else {
 				LinearLogin.setVisibility(View.GONE);
 				LinearLocal.setVisibility(View.VISIBLE);
@@ -98,4 +114,6 @@ public class UserInfoActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
+	
 }

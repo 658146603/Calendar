@@ -1,7 +1,7 @@
 package listviewadapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import com.qscftyjm.calendar.R;
 
@@ -11,11 +11,11 @@ import android.widget.SimpleAdapter;
 
 public class ListViewAdapter {
 
-	public static void UserInfoAdapter(Context context,ListView listView, ArrayList<HashMap<String, Object>> dataArray) {
+	public static ListView UserInfoAdapter(Context context,ListView listView, ArrayList<Map<String, Object>> dataArray) {
 		
-		SimpleAdapter adapter=new SimpleAdapter(context, dataArray, R.layout.list_item_layout, new String[]{"name","content","time","imgId"}, new int[]{R.id.user_name,R.id.content,R.id.time,R.id.icon});
+		SimpleAdapter adapter=new SimpleAdapter(context, dataArray, R.layout.list_item_userinfo_layout, new String[]{ "id", "account", "username", "priority", "lastchecktime" }, new int[]{ R.id.user_id, R.id.user_account, R.id.user_username, R.id.user_priority, R.id.user_lastchecktime });
 		listView.setAdapter(adapter);
 		
-		
+		return listView;
 	}
 }
