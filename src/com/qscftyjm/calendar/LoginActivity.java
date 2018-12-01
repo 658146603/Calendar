@@ -9,8 +9,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewDebug.FlagToString;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -71,23 +73,37 @@ public class LoginActivity extends Activity {
 											Toast.makeText(LoginActivity.this, "欢迎 "+data.optString("UserName")+" ！正在跳转到主界面......", Toast.LENGTH_SHORT).show();
 											SQLiteHelper sqLiteHelper=new SQLiteHelper(LoginActivity.this, "calendar.db", null, 1);
 											SQLiteDatabase database=sqLiteHelper.getWritableDatabase();
-											
+											boolean isExist=false;
 											Cursor cursor = database.query("logininfo", new String[] {"id","username","account"}, new String("account = ?"), new String[] { account }, null, null, null, null);
 											int count=0;
 											if(cursor.moveToFirst()) {
 												count=cursor.getCount();
 												if(count>0) {
-													database.execSQL("delete from logininfo where account = ?",new String[] { account });
+													//更新数据
+													isExist=true;
+													ContentValues values=new ContentValues();
+													values.put("lastchecktime", TimeUtil.getTime());
+													values.put("password", password);
+													values.put("username", data.optString("UserName","000000"));
+													database.update("logininfo", values, "account = ?", new String[] { account });
+													Log.d("Calendar", "更新账号数据 "+account);
+													
 												}
 											}
 											cursor.close();
-											ContentValues values = new ContentValues();
-							                values.put("account",account);
-							                values.put("password",password);
-							                values.put("username",data.optString("UserName","000000"));
-							                values.put("priority",data.optInt("Priority", 0));
-							                values.put("lastchecktime",TimeUtil.getTime());
-							                long id=database.insert("logininfo",null,values);//插入数据
+											if(!isExist) {
+												//插入数据
+												ContentValues values = new ContentValues();
+								                values.put("account",account);
+								                values.put("password",password);
+								                values.put("username",data.optString("UserName","000000"));
+								                values.put("priority",data.optInt("Priority", 0));
+								                values.put("lastchecktime",TimeUtil.getTime());
+								                long id=database.insert("logininfo",null,values);
+								                
+								                Log.d("Calendar", "添加账号数据 "+account);
+											}
+											
 											Intent intent=new Intent(LoginActivity.this, MainActivity.class);
 											startActivity(intent);
 											finish();

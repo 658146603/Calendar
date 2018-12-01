@@ -4,6 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.util.Log;
+
 public class TimeUtil {
 
 	public static String getTime(){
@@ -25,7 +27,8 @@ public class TimeUtil {
 			Date lastdate = sdf.parse(lastcheckertime);
 			Date nowdate=new Date();
 			long delta=nowdate.getTime()-lastdate.getTime();
-			if(delta>=0&&delta<=1000*30) {
+			Log.d("Calendar", "delta time : "+delta);
+			if(delta>=0&&delta<=1000*3600*24*7) {
 				flag=false;
 			}
 		} catch (ParseException e) {

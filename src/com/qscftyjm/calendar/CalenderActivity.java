@@ -55,7 +55,7 @@ public class CalenderActivity extends Activity {
             //drawCircle(50,50,90,canvas,paint);
             //drawLine(canvas);
             paint.setColor(0xFFCCCCDD);
-            Log.d("Clander",screenX+"*"+screenY);
+            Log.d("Calendar",screenX+"*"+screenY);
 //           for(int i=130;i<=screenY;i+=120){
 //            	drawPartLine(i, canvas, paint);
 //            	for(int j=100;j<screenX;j+=(screenX-200)/6){

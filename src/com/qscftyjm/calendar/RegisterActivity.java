@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import postutil.AsynTaskUtil;
 import postutil.AsynTaskUtil.AsynNetUtils;
 import postutil.AsynTaskUtil.AsynNetUtils.Callback;
 import tools.AlertDialogUtil;
@@ -55,22 +54,28 @@ public class RegisterActivity extends Activity {
 								public void onResponse(String response) {
 									// TODO Auto-generated method stub
 									String result=response;
-									try {
-										JSONObject jsonObj=new JSONObject(result);
-										int status=jsonObj.optInt("Status", -1);
-										if(status==0) {
-											JSONObject data=jsonObj.getJSONObject("Data");
-											Toast.makeText(RegisterActivity.this, "注册成功，即将跳转登录界面", Toast.LENGTH_SHORT).show();
-											AlertDialogUtil.makeRegisterResultDialog(RegisterActivity.this, data.optString("Account","null"), data.optString("UserName", "null"));
-											//finish();
-										} else {
-											Toast.makeText(RegisterActivity.this, "网络或服务器错误，请稍后再试", Toast.LENGTH_SHORT).show();
+									JSONObject jsonObj=null;
+									if(response!=null) {
+										try {
+											jsonObj=new JSONObject(result);
+											int status=jsonObj.optInt("Status", -1);
+											if(status==0) {
+												JSONObject data=jsonObj.getJSONObject("Data");
+												Toast.makeText(RegisterActivity.this, "注册成功，即将跳转登录界面", Toast.LENGTH_SHORT).show();
+												AlertDialogUtil.makeRegisterResultDialog(RegisterActivity.this, data.optString("Account","null"), data.optString("UserName", "null"));
+												//finish();
+											} else {
+												Toast.makeText(RegisterActivity.this, "网络或服务器错误，请稍后再试", Toast.LENGTH_SHORT).show();
+											}
+											
+										} catch (JSONException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
 										}
-										
-									} catch (JSONException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
+									} else {
+										Toast.makeText(RegisterActivity.this, "网络错误，请稍后再试", Toast.LENGTH_SHORT).show();
 									}
+									
 								}
 							});
 						}else {

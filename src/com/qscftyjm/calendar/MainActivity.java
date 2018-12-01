@@ -54,10 +54,20 @@ public class MainActivity extends Activity {
 				do {
 					final String account=cursor.getString(0);
 					String password=cursor.getString(1);
+					if(password.equals("000000")) {
+						//检测过期账户，过期的密码为000000
+						Log.d("Calendar", "用户登录数据 "+account+" 已过期");
+						continue;
+					}
 					if(TimeUtil.checkIsOverTime(cursor.getString(2))) {
 						Toast.makeText(MainActivity.this, "用户登录数据 "+account+" 已过期，无法进行云同步", Toast.LENGTH_LONG).show();
-						password="";
-						//continue;
+						password="000000";
+						ContentValues values=new ContentValues();
+						values.put("password", password);
+						values.put("lastchecktime", TimeUtil.getTime());
+						database.update("logininfo", values, "account = ?", new String[] { account });
+						Log.d("Calendar", "设置用户登录数据 "+account+" 已过期");
+						continue;
 					}
 					AsynNetUtils.post("http://192.168.42.252:8080/CalendarServer/CalendarPost", ParamToJSON.formLoginJson(account, password), new Callback() {
 
@@ -73,9 +83,11 @@ public class MainActivity extends Activity {
 										ContentValues values=new ContentValues();
 										values.put("lastchecktime", TimeUtil.getTime());
 										database.update("logininfo", values, "account = ?", new String[] { account });
-										
+										Toast.makeText(MainActivity.this, "用户 "+account+" 的账号更新成功", Toast.LENGTH_SHORT).show();
+										Log.d("Calendar", "用户 "+account+" 的账号更新成功");
 									} else {
-										Toast.makeText(MainActivity.this, "用户 "+account+" 的账号已过期，即将删除关于 "+account+" 的所有本地数据", Toast.LENGTH_LONG).show();
+										Toast.makeText(MainActivity.this, "用户 "+account+" 的账号已不存在", Toast.LENGTH_LONG).show();
+										Log.d("Calendar", "用户 "+account+" 的账号已不存在");
 										database.execSQL("delete from logininfo where account = ?", new String[] { account });
 									}
 								} catch (JSONException e) {
