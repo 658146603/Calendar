@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -76,8 +77,8 @@
 
 	        <ImageButton
 	            android:id="@+id/user_btn_show_detail"
-	            android:layout_width="25dp"
-	            android:layout_height="25dp"
+	            android:layout_width="30dp"
+	            android:layout_height="30dp"
 	            android:layout_alignParentRight="true"
 	            android:padding="0dp"
 	            android:scaleType="fitXY"
