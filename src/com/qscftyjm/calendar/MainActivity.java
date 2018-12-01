@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
 						password="000000";
 						ContentValues values=new ContentValues();
 						values.put("password", password);
-						values.put("lastchecktime", TimeUtil.getTime());
+						//values.put("lastchecktime", TimeUtil.getTime());
 						database.update("logininfo", values, "account = ?", new String[] { account });
 						Log.d("Calendar", "设置用户登录数据 "+account+" 已过期");
 						continue;

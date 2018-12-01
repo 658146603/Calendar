@@ -19,7 +19,10 @@
             <ListView
                 android:id="@+id/list_userinfo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+		        android:background="@color/md_light_blue_100"
+		        android:divider="@color/md_amber_50"
+		        android:dividerHeight="1px" >
                 
             </ListView>
             

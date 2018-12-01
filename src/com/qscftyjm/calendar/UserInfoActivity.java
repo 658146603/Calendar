@@ -13,13 +13,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import listviewadapter.ListViewAdapter;
+import listviewadapter.ListViewUtil;
+import listviewadapter.UserInfoAdapter;
 import sqliteutil.SQLiteHelper;
+import tools.TimeUtil;
 
 public class UserInfoActivity extends Activity {
 
@@ -29,6 +33,7 @@ public class UserInfoActivity extends Activity {
 	
 	private LinearLayout LinearLogin;
 	private ListView list_userinfo;
+	private UserInfoAdapter adapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,7 @@ public class UserInfoActivity extends Activity {
 		SQLiteHelper sqLiteHelper=new SQLiteHelper(UserInfoActivity.this, "calendar.db", null, 1);
 		SQLiteDatabase database=sqLiteHelper.getWritableDatabase();
 		
-		Cursor cursor = database.query("logininfo", new String[] { "id", "account", "username", "priority", "lastchecktime" }, null, null, null, null, null, null);
+		Cursor cursor = database.query("logininfo", new String[] { "id", "account", "username", "priority", "lastchecktime","password" }, null, null, null, null, null, null);
 		int count=0;
 		if(cursor.moveToFirst()) {
 			count=cursor.getCount();
@@ -55,15 +60,29 @@ public class UserInfoActivity extends Activity {
 					String username=cursor.getString(2);
 					int priority=cursor.getInt(3);
 					String lastchecktime=cursor.getString(4);
+					boolean isOverTime=cursor.getString(5).equals("000000");
 					Map<String, Object> tempMap=new HashMap<String, Object>();
 					tempMap.put("id", id);
 					tempMap.put("account", account);
 					tempMap.put("username", username);
 					tempMap.put("priority", priority);
 					tempMap.put("lastchecktime", lastchecktime);
+					tempMap.put("overtime", isOverTime);
 					userArray.add(tempMap);
-					list_userinfo=ListViewAdapter.UserInfoAdapter(UserInfoActivity.this, list_userinfo, userArray);
+					//list_userinfo=ListViewUtil.UserInfoAdapter(UserInfoActivity.this, list_userinfo, userArray);
 				} while(cursor.moveToNext());
+				adapter=new UserInfoAdapter(UserInfoActivity.this, userArray);
+				list_userinfo.setAdapter(adapter);
+				list_userinfo.setOnItemClickListener(new OnItemClickListener() {
+					
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+						// TODO Auto-generated method stub
+						View v=view;
+						Toast.makeText(UserInfoActivity.this, "第 "+position+" 项被点击", Toast.LENGTH_SHORT).show();
+						
+					}
+				});
 			}else {
 				LinearLogin.setVisibility(View.GONE);
 				LinearLocal.setVisibility(View.VISIBLE);

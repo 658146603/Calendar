@@ -18,13 +18,13 @@ public class TimeUtil {
 		return time; 
 	}
 
-	public static boolean checkIsOverTime(String lastcheckertime) {
+	public static boolean checkIsOverTime(String lastchecketime) {
 		// TODO Auto-generated method stub
 		boolean flag=true;
 		
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date lastdate = sdf.parse(lastcheckertime);
+			Date lastdate = sdf.parse(lastchecketime);
 			Date nowdate=new Date();
 			long delta=nowdate.getTime()-lastdate.getTime();
 			Log.d("Calendar", "delta time : "+delta);

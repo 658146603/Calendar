@@ -54,7 +54,7 @@
             android:text="lastchecktime : 1970-01-01 08:00" />
 
         <Button
-            android:id="@+id/user_show_detail"
+            android:id="@+id/user_btn_show_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="显示详情" />
@@ -62,7 +62,7 @@
     </LinearLayout>
     
     <LinearLayout
-        android:id="@+id/user_showdetail"
+        android:id="@+id/user_linear_show_detail"
         android:orientation="vertical"
         android:layout_height="150dp"
         android:layout_width="match_parent"

@@ -9,7 +9,7 @@ import android.content.Context;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class ListViewAdapter {
+public class ListViewUtil {
 
 	public static ListView UserInfoAdapter(Context context,ListView listView, ArrayList<Map<String, Object>> dataArray) {
 		
