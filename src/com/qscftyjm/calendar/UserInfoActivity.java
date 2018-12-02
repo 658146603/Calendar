@@ -134,17 +134,27 @@ public class UserInfoActivity extends Activity {
 		int index=(int) info.id;
 		//Toast.makeText(UserInfoActivity.this, "长按点击了第"+index+"条的第"+menuItem.getItemId()+"项", Toast.LENGTH_SHORT).show();
 		String optAccount=userArray.get(index).get("account").toString();
+		String optUsername=userArray.get(index).get("username").toString();
 		switch (menuItem.getItemId()) {
 			case 0:
-				Toast.makeText(UserInfoActivity.this, "account : "+optAccount, Toast.LENGTH_SHORT).show();
-				
+				Toast.makeText(UserInfoActivity.this, "account : "+optAccount+"\nusername : "+optUsername, Toast.LENGTH_SHORT).show();
+				Intent intent0=new Intent(UserInfoActivity.this, AddScheduleActivity.class);
+				startActivity(intent0);
 				break;
 			case 1:
-				Toast.makeText(UserInfoActivity.this, "1", Toast.LENGTH_SHORT).show();
+				Toast.makeText(UserInfoActivity.this, "添加日程", Toast.LENGTH_SHORT).show();
+				Intent intent1=new Intent(UserInfoActivity.this, AddScheduleActivity.class);
+				Bundle bundle1=new Bundle();
+				bundle1.putString("account", optAccount);
+				bundle1.putString("username", optUsername);
+				intent1.putExtras(bundle1);
+				startActivity(intent1);
 				break;
 			case 2:
 				database.execSQL("delete from logininfo where account = ?", new String[] { optAccount });
-				Toast.makeText(UserInfoActivity.this, "注销成功", Toast.LENGTH_SHORT).show();
+				Toast.makeText(UserInfoActivity.this, "用户 "+optAccount+" 注销成功", Toast.LENGTH_SHORT).show();
+				userArray.remove(index);
+				adapter.notifyDataSetChanged();
 				break;
 		}
 		

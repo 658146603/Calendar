@@ -40,6 +40,10 @@
             android:name=".UserInfoActivity"
             android:label="@string/title_activity_user_info" >
         </activity>
+        <activity
+            android:name=".AddScheduleActivity"
+            android:label="@string/title_activity_add_schedule" >
+        </activity>
     </application>
 
 </manifest>

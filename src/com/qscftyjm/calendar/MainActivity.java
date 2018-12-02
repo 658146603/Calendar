@@ -33,11 +33,11 @@ public class MainActivity extends Activity {
 //		Bundle bundle = this.getIntent().getExtras();
 //		if(bundle!=null&&bundle.containsKey("username")) {
 //			
-//			String uesrname=bundle.getString("username");
+//			String username=bundle.getString("username");
 //			String account=bundle.getString("account");
 //			String prority=bundle.getString("priority");
 //			Toast.makeText(this, 
-//					"登录成功！\nusername : "+uesrname
+//					"登录成功！\nusername : "+username
 //					+ "\naccount : "+account
 //					+ "\npriority : "+prority, Toast.LENGTH_SHORT).show();
 //			
