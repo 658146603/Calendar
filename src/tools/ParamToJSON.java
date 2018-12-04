@@ -53,6 +53,10 @@ public class ParamToJSON {
 		UserInfo.put("Method", "changepassword");
 		Map<String, Object> Data=new HashMap<String, Object>();
 		Map<String, Object> InnerData=new HashMap<String, Object>();
+		
+		oldPassword=MD5Util.getMd5(oldPassword);
+		newPassword=MD5Util.getMd5(newPassword);
+		
 		InnerData.put("NewPassword", newPassword);
 		InnerData.put("OldPassword", oldPassword);
 		Map<String, Object> User=new HashMap<String, Object>();

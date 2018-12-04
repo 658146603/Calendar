@@ -20,11 +20,13 @@ import postutil.AsynTaskUtil.AsynNetUtils;
 import postutil.AsynTaskUtil.AsynNetUtils.Callback;
 import sqliteutil.SQLiteHelper;
 import tools.ParamToJSON;
+import tools.StringCollector;
 import tools.TimeUtil;
 
 public class MainActivity extends Activity {
 
 	private Button button1;
+	private Button button2;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,12 +66,11 @@ public class MainActivity extends Activity {
 						password="000000";
 						ContentValues values=new ContentValues();
 						values.put("password", password);
-						//values.put("lastchecktime", TimeUtil.getTime());
 						database.update("logininfo", values, "account = ?", new String[] { account });
 						Log.d("Calendar", "设置用户登录数据 "+account+" 已过期");
 						continue;
 					}
-					AsynNetUtils.post("http://192.168.42.252:8080/CalendarServer/CalendarPost", ParamToJSON.formLoginJson(account, password), new Callback() {
+					AsynNetUtils.post(StringCollector.GetServer(), ParamToJSON.formLoginJson(account, password), new Callback() {
 
 						@Override
 						public void onResponse(String response) {
@@ -81,7 +82,10 @@ public class MainActivity extends Activity {
 									
 									jsonObj=new JSONObject(result);
 									if(jsonObj.optInt("Status",-1)==0) {
+										JSONObject data=jsonObj.optJSONObject("Data");
 										ContentValues values=new ContentValues();
+						                values.put("username",data.optString("UserName","000000"));
+						                values.put("priority",data.optInt("Priority", 0));
 										values.put("lastchecktime", TimeUtil.getTime());
 										database.update("logininfo", values, "account = ?", new String[] { account });
 										Toast.makeText(MainActivity.this, "用户 "+account+" 的账号更新成功", Toast.LENGTH_SHORT).show();
@@ -120,12 +124,23 @@ public class MainActivity extends Activity {
 		
 		
 		button1=(Button)findViewById(R.id.button1);
+		button2=(Button)findViewById(R.id.button2);
 		button1.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
 				Intent intent = new Intent(MainActivity.this,CalenderActivity.class);
+				startActivity(intent);
+			}
+		});
+		
+		button2.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(MainActivity.this,ChangePasswordActivity.class);
 				startActivity(intent);
 			}
 		});

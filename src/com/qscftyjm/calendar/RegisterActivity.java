@@ -15,6 +15,7 @@ import postutil.AsynTaskUtil.AsynNetUtils.Callback;
 import tools.AlertDialogUtil;
 import tools.MD5Util;
 import tools.ParamToJSON;
+import tools.StringCollector;
 
 public class RegisterActivity extends Activity {
 
@@ -48,7 +49,7 @@ public class RegisterActivity extends Activity {
 						if(password.length()>=6&&password.length()<=18) {
 							Toast.makeText(RegisterActivity.this, password, Toast.LENGTH_SHORT).show();
 							
-							AsynNetUtils.post("http://192.168.42.252:8080/CalendarServer/CalendarPost", ParamToJSON.formRegisterJson(username, MD5Util.getMd5(password)), new Callback() {
+							AsynNetUtils.post(StringCollector.GetServer(), ParamToJSON.formRegisterJson(username, MD5Util.getMd5(password)), new Callback() {
 
 								@Override
 								public void onResponse(String response) {

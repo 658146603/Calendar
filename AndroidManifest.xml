@@ -44,6 +44,10 @@
             android:name=".AddScheduleActivity"
             android:label="@string/title_activity_add_schedule" >
         </activity>
+        <activity
+            android:name=".ChangePasswordActivity"
+            android:label="@string/title_activity_change_password" >
+        </activity>
     </application>
 
 </manifest>

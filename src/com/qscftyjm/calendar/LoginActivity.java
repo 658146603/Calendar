@@ -20,6 +20,7 @@ import postutil.AsynTaskUtil.AsynNetUtils.Callback;
 import sqliteutil.SQLiteHelper;
 import tools.MD5Util;
 import tools.ParamToJSON;
+import tools.StringCollector;
 import tools.TimeUtil;
 
 public class LoginActivity extends Activity {
@@ -52,7 +53,7 @@ public class LoginActivity extends Activity {
 					final String password=input_password;
 
 					
-					AsynTaskUtil.AsynNetUtils.post("http://192.168.42.252:8080/CalendarServer/CalendarPost", ParamToJSON.formLoginJson(account, password), new Callback() {
+					AsynTaskUtil.AsynNetUtils.post(StringCollector.GetServer(), ParamToJSON.formLoginJson(account, password), new Callback() {
 						
 						@Override
 						public void onResponse(String response) {
