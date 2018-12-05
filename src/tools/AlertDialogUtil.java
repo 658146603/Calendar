@@ -1,14 +1,21 @@
 package tools;
 
 import com.qscftyjm.calendar.LoginActivity;
-import com.qscftyjm.calendar.RegisterActivity;
+import com.qscftyjm.calendar.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AlertDialogUtil {
 
@@ -30,4 +37,30 @@ public class AlertDialogUtil {
                 }).show();
                     
 	}
+
+	public static int makeAddItemChoiceDialog(final Context context){
+		
+        final TextView tv = new TextView(context);
+        int clickItem=-1;
+        tv.setHeight(120);
+        tv.setLines(1);
+        tv.setText("12345");
+        ListView listView=new ListView(context, null);
+        ListAdapter adapter = new ArrayAdapter<String>(context, android.R.layout.simple_expandable_list_item_1, new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" });
+		listView.setAdapter(adapter);
+        new AlertDialog.Builder(context).setTitle("title")
+                .setView(tv).setView(listView).show().getWindow().setLayout(600, 800);
+        listView.setOnItemClickListener(new OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+        
+        return clickItem;
+                    
+	}
+
 }

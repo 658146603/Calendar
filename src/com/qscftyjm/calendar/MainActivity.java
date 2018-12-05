@@ -15,18 +15,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import postutil.AsynTaskUtil.AsynNetUtils;
 import postutil.AsynTaskUtil.AsynNetUtils.Callback;
 import sqliteutil.SQLiteHelper;
+import tools.AlertDialogUtil;
 import tools.ParamToJSON;
 import tools.StringCollector;
 import tools.TimeUtil;
 
 public class MainActivity extends Activity {
 
-	private Button button1;
-	private Button button2;
+	private Button button1, button2, button3;
+	private Button bt_tab[]=new Button[4];
+	LinearLayout linear[]=new LinearLayout[4];
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -125,6 +128,17 @@ public class MainActivity extends Activity {
 		
 		button1=(Button)findViewById(R.id.button1);
 		button2=(Button)findViewById(R.id.button2);
+		button3=(Button)findViewById(R.id.button3);
+		bt_tab[0]=(Button)findViewById(R.id.tab_btn_home);
+		bt_tab[1]=(Button)findViewById(R.id.tab_btn_team);
+		bt_tab[2]=(Button)findViewById(R.id.tab_btn_message);
+		bt_tab[3]=(Button)findViewById(R.id.tab_btn_info);
+		
+		linear[0]=(LinearLayout)findViewById(R.id.main_linear_home);
+		linear[1]=(LinearLayout)findViewById(R.id.main_linear_team);
+		linear[2]=(LinearLayout)findViewById(R.id.main_linear_message);
+		linear[3]=(LinearLayout)findViewById(R.id.main_linear_info);
+		
 		button1.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -142,6 +156,63 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(MainActivity.this,ChangePasswordActivity.class);
 				startActivity(intent);
+			}
+		});
+		
+		bt_tab[0].setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				linear[0].setVisibility(View.VISIBLE);
+				linear[1].setVisibility(View.GONE);
+				linear[2].setVisibility(View.GONE);
+				linear[3].setVisibility(View.GONE);
+			}
+		});
+		
+		bt_tab[1].setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				linear[1].setVisibility(View.VISIBLE);
+				linear[0].setVisibility(View.GONE);
+				linear[2].setVisibility(View.GONE);
+				linear[3].setVisibility(View.GONE);
+			}
+		});
+		
+		bt_tab[2].setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				linear[2].setVisibility(View.VISIBLE);
+				linear[0].setVisibility(View.GONE);
+				linear[1].setVisibility(View.GONE);
+				linear[3].setVisibility(View.GONE);
+			}
+		});
+		
+		bt_tab[3].setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				linear[3].setVisibility(View.VISIBLE);
+				linear[0].setVisibility(View.GONE);
+				linear[1].setVisibility(View.GONE);
+				linear[2].setVisibility(View.GONE);
+			}
+		});
+		
+		button3.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				AlertDialogUtil.makeAddItemChoiceDialog(MainActivity.this);
 			}
 		});
 		
@@ -175,6 +246,7 @@ public class MainActivity extends Activity {
 				
 			case R.id.main_refreshItem:
 				Log.i("Clander","REFRESH");
+				Toast.makeText(MainActivity.this, "Ë¢ÐÂÖÐ...", Toast.LENGTH_SHORT).show();
 				break;
 		}
 		
