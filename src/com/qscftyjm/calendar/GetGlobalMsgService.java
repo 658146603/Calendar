@@ -17,7 +17,9 @@ public class GetGlobalMsgService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		
+		Intent intent = new Intent();
+        intent.setAction("com.qscftyjm.calendar.HAS_NEW_MSG");
+        sendBroadcast(intent);
 		
 	}
 	

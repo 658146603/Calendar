@@ -13,99 +13,140 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@color/md_blue_100" >
-        
-        <LinearLayout
-	        android:id="@+id/main_linear_home"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical"
-	        android:visibility="visible" >
 
-	        <TextView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:textSize="40sp"
-	            android:text="home" />
-	
-	        <Button
-	            android:id="@+id/button1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="跳转到CalendarView" />
-	
-	        <Button
-	            android:id="@+id/button2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="修改密码" />
-	        
-	        <Button
-	            android:id="@+id/button3"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:text="测试对话框" />
-	
-	    </LinearLayout>
-	    
         <LinearLayout
-	        android:id="@+id/main_linear_team"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical"
-	        android:visibility="gone" >
+            android:id="@+id/main_linear_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
 
-	        <TextView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:textSize="40sp"
-	            android:text="team" />
-	
-	       
-	
-	    </LinearLayout>
-	    
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="home"
+                android:textSize="40sp" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="跳转到CalendarView" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="修改密码" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="测试对话框" />
+        </LinearLayout>
+
         <LinearLayout
-	        android:id="@+id/main_linear_message"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical"
-	        android:visibility="gone" >
+            android:id="@+id/main_linear_team"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
 
-	        <TextView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:textSize="40sp"
-	            android:text="message" />
-	
-	       <ListView
-	           android:id="@+id/list_msg"
-	           android:layout_width="match_parent"
-	           android:layout_height="wrap_content" >
-	           
-	       </ListView>
-	       
-	       
-	    </LinearLayout>
-	    
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="team"
+                android:textSize="40sp" />
+        </LinearLayout>
+
         <LinearLayout
-	        android:id="@+id/main_linear_info"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:orientation="vertical"
-	        android:visibility="gone" >
+            android:id="@+id/main_linear_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible" >
 
-	        <TextView
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:textSize="40sp"
-	            android:text="info" />
-	
-	       
-	
-	    </LinearLayout>
-        
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:text="message"
+                android:textSize="40sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <ListView
+                    android:id="@+id/list_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/linear_send_msg" >
+                </ListView>
+
+                <RelativeLayout
+                    android:id="@+id/linear_send_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/md_grey_500"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:id="@+id/bt_choose_account"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignBottom="@+id/input_msg"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/user" />
+                    
+                    <EditText
+                        android:id="@+id/input_msg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_toLeftOf="@+id/btn_send_msg"
+                        android:layout_toRightOf="@+id/bt_choose_account"
+                        android:background="@drawable/radius_left"
+                        android:maxLines="6"
+                        android:layout_marginTop="2dp"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp" />
+
+                    <Button
+                        android:id="@+id/btn_send_msg"
+                        android:layout_width="60dp"
+                        android:layout_height="36dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:background="@drawable/radius_right"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginRight="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Send" />
+
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/main_linear_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="info"
+                android:textSize="40sp" />
+        </LinearLayout>
     </FrameLayout>
-	    
 
     <LinearLayout
         android:id="@+id/main_bottom_bar"
@@ -119,71 +160,70 @@
         <LinearLayout
             android:layout_width="80dp"
             android:layout_height="70dp"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:layout_weight="1"
             android:padding="5dp" >
 
             <Button
                 android:id="@+id/tab_btn_home"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:paddingRight="20dp"
+                android:background="@drawable/home"
                 android:paddingLeft="20dp"
-                android:background="@drawable/home" />
+                android:paddingRight="20dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="80dp"
             android:layout_height="57dp"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:layout_weight="1"
             android:padding="5dp" >
 
             <Button
                 android:id="@+id/tab_btn_team"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:paddingRight="20dp"
+                android:background="@drawable/group"
                 android:paddingLeft="20dp"
-                android:background="@drawable/group" />
+                android:paddingRight="20dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="80dp"
             android:layout_height="70dp"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:layout_weight="1"
             android:padding="5dp" >
 
             <Button
                 android:id="@+id/tab_btn_message"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:paddingRight="20dp"
+                android:background="@drawable/message"
                 android:paddingLeft="20dp"
-                android:background="@drawable/message" />
+                android:paddingRight="20dp" />
         </LinearLayout>
-        
+
         <LinearLayout
             android:layout_width="80dp"
             android:layout_height="70dp"
+            android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:layout_weight="1"
             android:padding="5dp" >
 
             <Button
                 android:id="@+id/tab_btn_info"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:paddingRight="20dp"
+                android:background="@drawable/add_item"
                 android:paddingLeft="20dp"
-                android:background="@drawable/add_item" />
+                android:paddingRight="20dp" />
         </LinearLayout>
-        
     </LinearLayout>
 
 </RelativeLayout>

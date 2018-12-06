@@ -1,6 +1,5 @@
 package com.qscftyjm.calendar;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,21 +12,26 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
-import android.content.BroadcastReceiver;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import listviewadapter.MsgListAdapter;
@@ -41,12 +45,16 @@ import tools.TimeUtil;
 
 public class MainActivity extends Activity {
 
-	private Button button1, button2, button3;
+	private Button button1, button2, button3, bt_send_msg, bt_choose_account;
 	private Button bt_tab[]=new Button[4];
 	private LinearLayout linear[]=new LinearLayout[4];
+	private EditText et_send_msg;
 	private ListView list_msg;
 	ArrayList<Map<String, Object>> msgData;
 	MsgListAdapter msgListAdapter;
+	private static ArrayList<Map<String, Object>> availableAccount = new ArrayList<Map<String, Object>>();
+	private static String chooseAccount = null;
+	MsgReceiver msgReceiver;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +65,13 @@ public class MainActivity extends Activity {
 		button1=(Button)findViewById(R.id.button1);
 		button2=(Button)findViewById(R.id.button2);
 		button3=(Button)findViewById(R.id.button3);
+		bt_send_msg=(Button)findViewById(R.id.btn_send_msg);
+		bt_choose_account=(Button)findViewById(R.id.bt_choose_account);
 		bt_tab[0]=(Button)findViewById(R.id.tab_btn_home);
 		bt_tab[1]=(Button)findViewById(R.id.tab_btn_team);
 		bt_tab[2]=(Button)findViewById(R.id.tab_btn_message);
 		bt_tab[3]=(Button)findViewById(R.id.tab_btn_info);
+		et_send_msg=(EditText)findViewById(R.id.input_msg);
 		linear[0]=(LinearLayout)findViewById(R.id.main_linear_home);
 		linear[1]=(LinearLayout)findViewById(R.id.main_linear_team);
 		linear[2]=(LinearLayout)findViewById(R.id.main_linear_message);
@@ -84,6 +95,12 @@ public class MainActivity extends Activity {
 //			Intent startGetglobalMsg=new Intent(MainActivity.this, GetGlobalMsgService.class);
 //			startService(startGetglobalMsg);
 //		}
+		
+		msgReceiver=new MsgReceiver();
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction("com.qscftyjm.calendar.HAS_NEW_MSG");
+		registerReceiver(msgReceiver, intentFilter);
+		
 		Intent startGetglobalMsg=new Intent(MainActivity.this, GetGlobalMsgService.class);
 		startService(startGetglobalMsg);
 		
@@ -91,6 +108,7 @@ public class MainActivity extends Activity {
 		final SQLiteDatabase database = dbHelper.getWritableDatabase();
 		Cursor cursor = database.query("logininfo", new String[] {"account","password","lastchecktime"}, null, null, null, null, null, null);
 		int count=0;
+		availableAccount.clear();
 		if(cursor.moveToFirst()) {
 			count=cursor.getCount();
 			if(count>0) {
@@ -111,6 +129,11 @@ public class MainActivity extends Activity {
 						Log.d("Calendar", "设置用户登录数据 "+account+" 已过期");
 						continue;
 					}
+					Map<String, Object> tempAccount=new HashMap<String, Object>();
+					tempAccount.put("account", account);
+					
+					tempAccount.put("password", password);
+					availableAccount.add(tempAccount);
 					AsynNetUtils.post(StringCollector.GetServer(), ParamToJSON.formLoginJson(account, password), new Callback() {
 
 						@Override
@@ -130,6 +153,7 @@ public class MainActivity extends Activity {
 										values.put("lastchecktime", TimeUtil.getTime());
 										database.update("logininfo", values, "account = ?", new String[] { account });
 										//Toast.makeText(MainActivity.this, "用户 "+account+" 的账号更新成功", Toast.LENGTH_SHORT).show();
+										chooseAccount=account;
 										Log.d("Calendar", "用户 "+account+" 的账号更新成功");
 									} else {
 										Toast.makeText(MainActivity.this, "用户 "+account+" 的账号已不存在", Toast.LENGTH_LONG).show();
@@ -214,6 +238,7 @@ public class MainActivity extends Activity {
 												database.insert("message", null, values);
 											}
 											msgListAdapter.notifyDataSetChanged();
+											list_msg.setSelection(msgListAdapter.getCount()-1);
 										}else {
 											Toast.makeText(MainActivity.this, "没有新消息", Toast.LENGTH_SHORT).show();
 										}
@@ -315,7 +340,114 @@ public class MainActivity extends Activity {
 			}
 		});
 		
+		bt_send_msg.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				String Content=et_send_msg.getText().toString();
+				if(Content.equals("")) {
+					Toast.makeText(MainActivity.this, "消息内容不能为空！", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				ArrayList<String> user=new ArrayList<String>();
+				String Password=null;
+				for (Map<String, Object> item : availableAccount) {
+					user.add((String)item.get("account"));
+					if(((String)item.get("account")).equals(chooseAccount)) {
+						Password=(String)item.get("password");
+					}
+				}
+				if(chooseAccount!=null) {
+					if(Password!=null) {
+						Map<String, Object> item=new HashMap<String, Object>();
+						item.put("time", TimeUtil.getTime());
+						item.put("content", Content);
+						item.put("account", chooseAccount);
+						item.put("username", "null");
+						msgData.add(item);
+						msgListAdapter.notifyDataSetChanged();
+						list_msg.setSelection(list_msg.getCount()-1);
+						AsynNetUtils.post(StringCollector.GetServer("message"), ParamToJSON.formSendGlobalMsgJson(chooseAccount, Password, Content), new Callback() {
+
+							@Override
+							public void onResponse(String response) {
+								// TODO Auto-generated method stub
+								if(response!=null) {
+									try {
+										JSONObject jsonObj=new JSONObject(response);
+										int status=jsonObj.optInt("Status", -1);
+										if(status==0) {
+											Toast.makeText(MainActivity.this, "发送成功", Toast.LENGTH_SHORT).show();
+										} else {
+											Toast.makeText(MainActivity.this, "账号 "+chooseAccount+" 已经过期，请切换账号或重新登录", Toast.LENGTH_SHORT).show();
+										}
+									} catch (JSONException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									
+								} else {
+									Toast.makeText(MainActivity.this, "网络连接异常", Toast.LENGTH_SHORT).show();
+								}
+							}
+							
+						});
+					}
+					
+				} else {
+					ListView userList=new ListView(MainActivity.this, null);
+					
+					ListAdapter adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_expandable_list_item_1, user);
+					userList.setAdapter(adapter);
+					final ArrayList<String> templist=user;
+					final AlertDialog builder=new AlertDialog.Builder(MainActivity.this).setTitle("选择你的账号")
+									                .setView(userList)
+									                .show();
+					userList.setOnItemClickListener(new OnItemClickListener() {
+						
+						@Override
+						public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+							// TODO Auto-generated method stub
+							chooseAccount=templist.get(position);
+							builder.dismiss();
+						}
+					});
+				}
+				
+				et_send_msg.setText("");
+			}
+		});
 		
+		bt_choose_account.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				ListView userList=new ListView(MainActivity.this, null);
+				ArrayList<String> user=new ArrayList<String>();
+				
+				for (Map<String, Object> item : availableAccount) {
+					user.add((String)item.get("account"));
+				}
+				final ArrayList<String> templist=user;
+				ListAdapter adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_expandable_list_item_1, user);
+				userList.setAdapter(adapter);
+				final AlertDialog builder=new AlertDialog.Builder(MainActivity.this).setTitle("选择你的账号")
+								                .setView(userList)
+								                .show();
+				
+				userList.setOnItemClickListener(new OnItemClickListener() {
+					
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+						// TODO Auto-generated method stub
+						chooseAccount=templist.get(position);
+						builder.dismiss();
+					}
+				});
+			}
+		});
 		
 		
 		
@@ -376,16 +508,9 @@ public class MainActivity extends Activity {
 				break;
 			}
 		}
+		
 		return isWork;
 	}
-	
-//	public class MyReceiver extends BroadcastReceiver {
-//	     @Override
-//	     public void onReceive(Context context, Intent intent) {
-//	      Bundle bundle=intent.getExtras();
-//	      
-//	     }
-//	}
 	
 	
 }

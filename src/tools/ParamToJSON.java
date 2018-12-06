@@ -85,4 +85,23 @@ public class ParamToJSON {
 		return result;
 	}
 	
+	public static String formSendGlobalMsgJson(String Account, String Password, String Content) {
+		String result=null;
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("Type", "message");
+		map.put("Method", "globalsend");
+		Map<String, Object> data=new HashMap<String, Object>();
+		Map<String, Object> user=new HashMap<String, Object>();
+		data.put("InnerData", Content);
+		user.put("PassWord", Password);
+		user.put("Account", Account);
+		user.put("ID", -1);
+		user.put("Priority", 0);
+		user.put("UserName", "");
+		data.put("User", user);
+		map.put("Data", data);
+		result="json="+new JSONObject(map).toString();
+		return result;
+	}
+	
 }
