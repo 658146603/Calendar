@@ -1,10 +1,12 @@
 package com.qscftyjm.calendar;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +20,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +30,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+import listviewadapter.MsgListAdapter;
 import postutil.AsynTaskUtil.AsynNetUtils;
 import postutil.AsynTaskUtil.AsynNetUtils.Callback;
 import sqliteutil.SQLiteHelper;
@@ -41,12 +45,28 @@ public class MainActivity extends Activity {
 	private Button bt_tab[]=new Button[4];
 	private LinearLayout linear[]=new LinearLayout[4];
 	private ListView list_msg;
+	ArrayList<Map<String, Object>> msgData;
+	MsgListAdapter msgListAdapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
+		
+		button1=(Button)findViewById(R.id.button1);
+		button2=(Button)findViewById(R.id.button2);
+		button3=(Button)findViewById(R.id.button3);
+		bt_tab[0]=(Button)findViewById(R.id.tab_btn_home);
+		bt_tab[1]=(Button)findViewById(R.id.tab_btn_team);
+		bt_tab[2]=(Button)findViewById(R.id.tab_btn_message);
+		bt_tab[3]=(Button)findViewById(R.id.tab_btn_info);
+		linear[0]=(LinearLayout)findViewById(R.id.main_linear_home);
+		linear[1]=(LinearLayout)findViewById(R.id.main_linear_team);
+		linear[2]=(LinearLayout)findViewById(R.id.main_linear_message);
+		linear[3]=(LinearLayout)findViewById(R.id.main_linear_info);
+		list_msg=(ListView)findViewById(R.id.list_msg);
+		
 //		Bundle bundle = this.getIntent().getExtras();
 //		if(bundle!=null&&bundle.containsKey("username")) {
 //			
@@ -109,7 +129,7 @@ public class MainActivity extends Activity {
 						                values.put("priority",data.optInt("Priority", 0));
 										values.put("lastchecktime", TimeUtil.getTime());
 										database.update("logininfo", values, "account = ?", new String[] { account });
-										Toast.makeText(MainActivity.this, "用户 "+account+" 的账号更新成功", Toast.LENGTH_SHORT).show();
+										//Toast.makeText(MainActivity.this, "用户 "+account+" 的账号更新成功", Toast.LENGTH_SHORT).show();
 										Log.d("Calendar", "用户 "+account+" 的账号更新成功");
 									} else {
 										Toast.makeText(MainActivity.this, "用户 "+account+" 的账号已不存在", Toast.LENGTH_LONG).show();
@@ -131,41 +151,92 @@ public class MainActivity extends Activity {
 				} while(cursor.moveToNext());
 				cursor.close();
 				
-//				cursor=database.query("logininfo", new String[] { "lastchecktime" }, null, null, null, null, null, null);
-//				if(cursor.moveToFirst()) {
-//					int ct=cursor.getCount();
-//					String lastchecktime=null;
-//					do {
-//						lastchecktime=cursor.getString(0);
-//					}while(cursor.moveToNext());
-//				}
-//				cursor.close();
-				int msgid=0;
-				cursor = database.query("message", new String[] { "msgid", "fromaccount", "sendtime", "content" }, null, null, null, null, null, null);
-				if(cursor.moveToFirst()) {
-					count=cursor.getCount();
-					if(count>0) {
-						
-					}
+				msgData=new ArrayList<Map<String, Object>>();
+				
+				Map<String, Object> msg=new HashMap<String, Object>();
+				msg.put("time", "现在没有消息哦");
+				msg.put("content", "");
+				msg.put("account", "");
+				msg.put("username", "");
+				msgData.add(msg);
+				int lastMsgid=0;
+				Cursor msgCursor = database.query("message", new String[] { "msgid", "fromaccount", "sendtime", "content" }, null, null, null, null, null, null);
+				if(msgCursor.moveToFirst()) {
+					do {
+						Map<String, Object> newMsg=new HashMap<String, Object>();
+						newMsg.put("time", msgCursor.getString(2));
+						newMsg.put("content", msgCursor.getString(3));
+						newMsg.put("account", msgCursor.getString(1));
+						newMsg.put("username", "null");
+						msgData.add(newMsg);
+						lastMsgid=msgCursor.getInt(0);
+					}while(msgCursor.moveToNext());
 					
 				}
+				msgCursor.close();
+				
+				msgListAdapter=new MsgListAdapter(MainActivity.this, msgData);
+				//msgData.getClass();
+				list_msg.setAdapter(msgListAdapter);
+				list_msg.setSelection(msgListAdapter.getCount()-1);
+				
+				
+				
+				
+				AsynNetUtils.post(StringCollector.GetServer("message"), ParamToJSON.formGetGlobalMsgJson(lastMsgid), new Callback() {
+
+					@Override
+					public void onResponse(String response) {
+						// TODO Auto-generated method stub
+						if(response!=null) {
+							try {
+								JSONObject jsonObj=new JSONObject(response);
+								int status=jsonObj.optInt("Status", -1);
+								if(status==0) {
+									JSONArray data=jsonObj.optJSONArray("Data");
+									if(data!=null) {
+										int newCount=data.length();
+										if(newCount>0) {
+											for(int i=0;i<newCount;i++) {
+												Map<String, Object> newMsg=new HashMap<String, Object>();
+												JSONObject newObj=data.getJSONObject(i);
+												newMsg.put("time", newObj.get("Time").toString());
+												newMsg.put("content", newObj.get("Content").toString());
+												newMsg.put("account", newObj.get("Account").toString());
+												newMsg.put("username", "null");
+												msgData.add(newMsg);
+												
+												ContentValues values=new ContentValues();
+												values.put("msgid", Integer.valueOf(newObj.get("ID").toString()));
+												values.put("fromaccount", newObj.get("Account").toString());
+												values.put("sendtime", newObj.get("Time").toString());
+												values.put("content", newObj.get("Content").toString());
+												database.insert("message", null, values);
+											}
+											msgListAdapter.notifyDataSetChanged();
+										}else {
+											Toast.makeText(MainActivity.this, "没有新消息", Toast.LENGTH_SHORT).show();
+										}
+										
+									}
+								}
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						} else {
+							Toast.makeText(MainActivity.this, "网络连接异常", Toast.LENGTH_SHORT).show();
+						}
+					}
+					
+				});
 				
 			}
 		}
 		
 		
-		button1=(Button)findViewById(R.id.button1);
-		button2=(Button)findViewById(R.id.button2);
-		button3=(Button)findViewById(R.id.button3);
-		bt_tab[0]=(Button)findViewById(R.id.tab_btn_home);
-		bt_tab[1]=(Button)findViewById(R.id.tab_btn_team);
-		bt_tab[2]=(Button)findViewById(R.id.tab_btn_message);
-		bt_tab[3]=(Button)findViewById(R.id.tab_btn_info);
-		linear[0]=(LinearLayout)findViewById(R.id.main_linear_home);
-		linear[1]=(LinearLayout)findViewById(R.id.main_linear_team);
-		linear[2]=(LinearLayout)findViewById(R.id.main_linear_message);
-		linear[3]=(LinearLayout)findViewById(R.id.main_linear_info);
-		list_msg=(ListView)findViewById(R.id.list_msg);
+		
+		
 		
 		button1.setOnClickListener(new OnClickListener() {
 			
@@ -308,13 +379,13 @@ public class MainActivity extends Activity {
 		return isWork;
 	}
 	
-	public class MyReceiver extends BroadcastReceiver {
-	     @Override
-	     public void onReceive(Context context, Intent intent) {
-	      Bundle bundle=intent.getExtras();
-	      
-	     }
-	}
+//	public class MyReceiver extends BroadcastReceiver {
+//	     @Override
+//	     public void onReceive(Context context, Intent intent) {
+//	      Bundle bundle=intent.getExtras();
+//	      
+//	     }
+//	}
 	
 	
 }

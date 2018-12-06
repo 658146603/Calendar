@@ -75,6 +75,14 @@ public class ParamToJSON {
 		
 	}
 
-	
+	public static String formGetGlobalMsgJson(int lastId) {
+		String result=null;
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("Type", "message");
+		map.put("Method", "globalget");
+		map.put("Data", lastId);
+		result="json="+new JSONObject(map).toString();
+		return result;
+	}
 	
 }
