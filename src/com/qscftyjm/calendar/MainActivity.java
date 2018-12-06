@@ -43,7 +43,7 @@ import tools.ParamToJSON;
 import tools.StringCollector;
 import tools.TimeUtil;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements MsgReceiver.Message{
 
 	private Button button1, button2, button3, bt_send_msg, bt_choose_account;
 	private Button bt_tab[]=new Button[4];
@@ -55,6 +55,8 @@ public class MainActivity extends Activity {
 	private static ArrayList<Map<String, Object>> availableAccount = new ArrayList<Map<String, Object>>();
 	private static String chooseAccount = null;
 	MsgReceiver msgReceiver;
+	SQLiteDatabase database;
+	SQLiteHelper dbHelper;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,12 +102,13 @@ public class MainActivity extends Activity {
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction("com.qscftyjm.calendar.HAS_NEW_MSG");
 		registerReceiver(msgReceiver, intentFilter);
+		msgReceiver.setMessage(this);
 		
 		Intent startGetglobalMsg=new Intent(MainActivity.this, GetGlobalMsgService.class);
 		startService(startGetglobalMsg);
 		
-		SQLiteHelper dbHelper=new SQLiteHelper(MainActivity.this, "calendar.db", null, SQLiteHelper.DB_VERSION);
-		final SQLiteDatabase database = dbHelper.getWritableDatabase();
+		dbHelper=new SQLiteHelper(MainActivity.this, "calendar.db", null, SQLiteHelper.DB_VERSION);
+		database = dbHelper.getWritableDatabase();
 		Cursor cursor = database.query("logininfo", new String[] {"account","password","lastchecktime"}, null, null, null, null, null, null);
 		int count=0;
 		availableAccount.clear();
@@ -457,6 +460,7 @@ public class MainActivity extends Activity {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+		unregisterReceiver(msgReceiver);
 		
 	}
 	
@@ -510,6 +514,37 @@ public class MainActivity extends Activity {
 		}
 		
 		return isWork;
+	}
+
+	@Override
+	public void getMsg(String msg) {
+		// TODO Auto-generated method stub
+		if(msg!=null) {
+			try {
+				JSONArray jsonArr=new JSONArray(msg);
+				int msgCt=jsonArr.length();
+				for(int i=0;i<msgCt;i++) {
+					Map<String, Object> newMsg=new HashMap<String, Object>();
+					JSONObject newObj=jsonArr.getJSONObject(i);
+					newMsg.put("time", newObj.get("Time").toString());
+					newMsg.put("content", newObj.get("Content").toString());
+					newMsg.put("account", newObj.get("Account").toString());
+					newMsg.put("username", "null");
+					msgData.add(newMsg);
+					
+					ContentValues values=new ContentValues();
+					values.put("msgid", Integer.valueOf(newObj.get("ID").toString()));
+					values.put("fromaccount", newObj.get("Account").toString());
+					values.put("sendtime", newObj.get("Time").toString());
+					values.put("content", newObj.get("Content").toString());
+					database.insert("message", null, values);
+				}
+				msgListAdapter.notifyDataSetChanged();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	
