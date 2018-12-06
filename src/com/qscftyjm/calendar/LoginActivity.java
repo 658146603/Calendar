@@ -71,7 +71,7 @@ public class LoginActivity extends Activity {
 											JSONObject data=jsonObj.optJSONObject("Data");
 											
 											Toast.makeText(LoginActivity.this, "欢迎 "+data.optString("UserName")+" ！正在跳转到主界面......", Toast.LENGTH_SHORT).show();
-											SQLiteHelper sqLiteHelper=new SQLiteHelper(LoginActivity.this, "calendar.db", null, 1);
+											SQLiteHelper sqLiteHelper=new SQLiteHelper(LoginActivity.this, "calendar.db", null, SQLiteHelper.DB_VERSION);
 											SQLiteDatabase database=sqLiteHelper.getWritableDatabase();
 											boolean isExist=false;
 											Cursor cursor = database.query("logininfo", new String[] {"id","username","account"}, new String("account = ?"), new String[] { account }, null, null, null, null);

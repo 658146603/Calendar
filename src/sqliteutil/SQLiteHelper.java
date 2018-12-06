@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
-	
+	public final static int DB_VERSION = 4;
 	final String CREATE_TABLE_LOGININFO="create table " 
 			+ "logininfo" + "("
             + "id" + " Integer primary key autoincrement,"
@@ -23,6 +23,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	final String CREATE_TABLE_MESSAGE="create table " 
 			+ "message" + "("
             + "id" + " Integer primary key autoincrement,"
+			+ "msgid" + " Integer,"
             + "fromaccount" + " text,"
             + "fromuseranme" + " text,"
             + "sendtime" + " text,"
@@ -64,8 +65,33 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
+		for (int i = oldVersion; i < newVersion; i++) {
+            switch (i) {
+            case 2:
+                upgradeToVersion2(db);
+                break;
+            case 3:
+                upgradeToVersion3(db);
+                break;
+                 
+            default:
+                break;
+            }
+        }
+	}
+
+	private void upgradeToVersion2(SQLiteDatabase db) {
+		// TODO Auto-generated method stub
+		String sql1 = "ALTER TABLE message ADD COLUMN msgid INTEGER";
+        db.execSQL(sql1);
+	}
+
+	private void upgradeToVersion3(SQLiteDatabase db) {
+		// TODO Auto-generated method stub
 		
 	}
+	
+	
 
 	
 	

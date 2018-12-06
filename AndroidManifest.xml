@@ -48,6 +48,12 @@
             android:name=".ChangePasswordActivity"
             android:label="@string/title_activity_change_password" >
         </activity>
+
+        <service
+            android:name=".GetGlobalMsgService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

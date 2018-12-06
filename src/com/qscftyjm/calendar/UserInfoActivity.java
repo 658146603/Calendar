@@ -47,7 +47,7 @@ public class UserInfoActivity extends Activity {
 		LinearLogin=(LinearLayout)findViewById(R.id.userinfo_login);
 		list_userinfo=(ListView)findViewById(R.id.list_userinfo);
 		
-		sqLiteHelper=new SQLiteHelper(UserInfoActivity.this, "calendar.db", null, 1);
+		sqLiteHelper=new SQLiteHelper(UserInfoActivity.this, "calendar.db", null, SQLiteHelper.DB_VERSION);
 		database=sqLiteHelper.getWritableDatabase();
 		Cursor cursor = database.query("logininfo", new String[] { "id", "account", "username", "priority", "lastchecktime","password" }, null, null, null, null, null, null);
 		int count=0;

@@ -18,4 +18,10 @@ public class ListViewUtil {
 		
 		return listView;
 	}
+	
+	public static ListView initMsgList(Context context, ListView listView, ArrayList<Map<String, Object>> msgArray) {
+		
+		return listView;
+		
+	}
 }

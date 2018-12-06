@@ -1,10 +1,19 @@
 package com.qscftyjm.calendar;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +25,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 import postutil.AsynTaskUtil.AsynNetUtils;
 import postutil.AsynTaskUtil.AsynNetUtils.Callback;
@@ -29,7 +39,9 @@ public class MainActivity extends Activity {
 
 	private Button button1, button2, button3;
 	private Button bt_tab[]=new Button[4];
-	LinearLayout linear[]=new LinearLayout[4];
+	private LinearLayout linear[]=new LinearLayout[4];
+	private ListView list_msg;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,9 +59,15 @@ public class MainActivity extends Activity {
 //					+ "\npriority : "+prority, Toast.LENGTH_SHORT).show();
 //			
 //		}
+//		
+//		if(!isServiceWork(MainActivity.this, "com.qscftyjm.calendar.GetGlobalMsgService")) {
+//			Intent startGetglobalMsg=new Intent(MainActivity.this, GetGlobalMsgService.class);
+//			startService(startGetglobalMsg);
+//		}
+		Intent startGetglobalMsg=new Intent(MainActivity.this, GetGlobalMsgService.class);
+		startService(startGetglobalMsg);
 		
-		
-		SQLiteHelper dbHelper=new SQLiteHelper(MainActivity.this, "calendar.db", null, 1);
+		SQLiteHelper dbHelper=new SQLiteHelper(MainActivity.this, "calendar.db", null, SQLiteHelper.DB_VERSION);
 		final SQLiteDatabase database = dbHelper.getWritableDatabase();
 		Cursor cursor = database.query("logininfo", new String[] {"account","password","lastchecktime"}, null, null, null, null, null, null);
 		int count=0;
@@ -122,6 +140,16 @@ public class MainActivity extends Activity {
 //					}while(cursor.moveToNext());
 //				}
 //				cursor.close();
+				int msgid=0;
+				cursor = database.query("message", new String[] { "msgid", "fromaccount", "sendtime", "content" }, null, null, null, null, null, null);
+				if(cursor.moveToFirst()) {
+					count=cursor.getCount();
+					if(count>0) {
+						
+					}
+					
+				}
+				
 			}
 		}
 		
@@ -133,11 +161,11 @@ public class MainActivity extends Activity {
 		bt_tab[1]=(Button)findViewById(R.id.tab_btn_team);
 		bt_tab[2]=(Button)findViewById(R.id.tab_btn_message);
 		bt_tab[3]=(Button)findViewById(R.id.tab_btn_info);
-		
 		linear[0]=(LinearLayout)findViewById(R.id.main_linear_home);
 		linear[1]=(LinearLayout)findViewById(R.id.main_linear_team);
 		linear[2]=(LinearLayout)findViewById(R.id.main_linear_message);
 		linear[3]=(LinearLayout)findViewById(R.id.main_linear_info);
+		list_msg=(ListView)findViewById(R.id.list_msg);
 		
 		button1.setOnClickListener(new OnClickListener() {
 			
@@ -217,8 +245,17 @@ public class MainActivity extends Activity {
 		});
 		
 		
+		
+		
+		
 	}
 	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -252,4 +289,32 @@ public class MainActivity extends Activity {
 		
 		return super.onOptionsItemSelected(item);
 	}
+	
+	public boolean isServiceWork(Context mContext, String serviceName) {
+		boolean isWork = false;
+		ActivityManager myAM = (ActivityManager) mContext
+				.getSystemService(Context.ACTIVITY_SERVICE);
+		List<RunningServiceInfo> myList = myAM.getRunningServices(40);
+		if (myList.size() <= 0) {
+			return false;
+		}
+		for (int i = 0; i < myList.size(); i++) {
+			String mName = myList.get(i).service.getClassName().toString();
+			if (mName.equals(serviceName)) {
+				isWork = true;
+				break;
+			}
+		}
+		return isWork;
+	}
+	
+	public class MyReceiver extends BroadcastReceiver {
+	     @Override
+	     public void onReceive(Context context, Intent intent) {
+	      Bundle bundle=intent.getExtras();
+	      
+	     }
+	}
+	
+	
 }

@@ -58,7 +58,7 @@ public class ChangePasswordActivity extends Activity {
 										int status=jsonObj.optInt("Status", -1);
 										if(status==0) {
 											Toast.makeText(ChangePasswordActivity.this, "修改密码成功，请重新登录", Toast.LENGTH_SHORT).show();
-											SQLiteHelper dbHelper=new SQLiteHelper(ChangePasswordActivity.this, "calendar.db", null, 1);
+											SQLiteHelper dbHelper=new SQLiteHelper(ChangePasswordActivity.this, "calendar.db", null, SQLiteHelper.DB_VERSION);
 											SQLiteDatabase database = dbHelper.getWritableDatabase();
 											ContentValues values=new ContentValues();
 											values.put("password", "000000");
