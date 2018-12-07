@@ -496,6 +496,8 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 				break;
 			
 			case R.id.main_addItem:
+				Intent intent2=new Intent(MainActivity.this, AddScheduleActivity.class);
+				startActivity(intent2);
 				Log.i("Clander","ADD");
 				break;
 				

@@ -14,6 +14,7 @@ public class AddScheduleActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_schedule);
+		
 		Bundle bundle=this.getIntent().getExtras();
 		if(bundle!=null&&bundle.containsKey("username")) {
 			
@@ -26,6 +27,8 @@ public class AddScheduleActivity extends Activity {
 		Toast.makeText(this, 
 					"nusername : "+username
 					+ "\naccount : "+account, Toast.LENGTH_SHORT).show();
+		
+		
 	}
 
 	@Override
@@ -41,7 +44,8 @@ public class AddScheduleActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.set_calendar_ok) {
+			Toast.makeText(AddScheduleActivity.this, "ÒÑ±£´æ", Toast.LENGTH_SHORT).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
