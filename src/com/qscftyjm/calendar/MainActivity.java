@@ -157,6 +157,7 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 										database.update("logininfo", values, "account = ?", new String[] { account });
 										//Toast.makeText(MainActivity.this, "用户 "+account+" 的账号更新成功", Toast.LENGTH_SHORT).show();
 										chooseAccount=account;
+										et_send_msg.setHint("以账号 "+chooseAccount+" 发送消息");
 										Log.d("Calendar", "用户 "+account+" 的账号更新成功");
 									} else {
 										Toast.makeText(MainActivity.this, "用户 "+account+" 的账号已不存在", Toast.LENGTH_LONG).show();
@@ -391,6 +392,7 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 											Toast.makeText(MainActivity.this, "发送成功", Toast.LENGTH_SHORT).show();
 										} else {
 											Toast.makeText(MainActivity.this, "账号 "+chooseAccount+" 已经过期，请切换账号或重新登录", Toast.LENGTH_SHORT).show();
+											et_send_msg.setHint("账号 "+chooseAccount+" 已过期");
 										}
 									} catch (JSONException e) {
 										// TODO Auto-generated catch block
@@ -420,6 +422,7 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 						public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 							// TODO Auto-generated method stub
 							chooseAccount=templist.get(position);
+							et_send_msg.setHint("以账号 "+chooseAccount+" 发送消息");
 							builder.dismiss();
 						}
 					});
@@ -453,6 +456,7 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 						// TODO Auto-generated method stub
 						chooseAccount=templist.get(position);
+						et_send_msg.setHint("以账号 "+chooseAccount+" 发送消息");
 						builder.dismiss();
 					}
 				});
@@ -539,12 +543,12 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 					newMsg.put("username", "null");
 					msgData.add(newMsg);
 					
-					ContentValues values=new ContentValues();
-					values.put("msgid", Integer.valueOf(newObj.get("ID").toString()));
-					values.put("fromaccount", newObj.get("Account").toString());
-					values.put("sendtime", newObj.get("Time").toString());
-					values.put("content", newObj.get("Content").toString());
-					database.insert("message", null, values);
+//					ContentValues values=new ContentValues();
+//					values.put("msgid", Integer.valueOf(newObj.get("ID").toString()));
+//					values.put("fromaccount", newObj.get("Account").toString());
+//					values.put("sendtime", newObj.get("Time").toString());
+//					values.put("content", newObj.get("Content").toString());
+//					database.insert("message", null, values);
 				}
 				if(msgListAdapter!=null&&list_msg!=null) {
 					msgListAdapter.notifyDataSetChanged();

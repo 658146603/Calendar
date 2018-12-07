@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Service;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -66,7 +67,17 @@ public class GetGlobalMsgService extends Service {
 								JSONObject jsonObj=new JSONObject(response);
 								if(jsonObj.optInt("Status", -1)==0) {
 									JSONArray msgArr=jsonObj.optJSONArray("Data");
-									if(msgArr.length()>0) {
+									int msgCt=msgArr.length();
+									if(msgCt>0) {
+										for(int i=0;i<msgCt;i++) {
+											JSONObject newObj=msgArr.getJSONObject(i);
+											ContentValues values=new ContentValues();
+											values.put("msgid", Integer.valueOf(newObj.get("ID").toString()));
+											values.put("fromaccount", newObj.get("Account").toString());
+											values.put("sendtime", newObj.get("Time").toString());
+											values.put("content", newObj.get("Content").toString());
+											database.insert("message", null, values);
+										}
 										json=msgArr.toString();
 										Intent intent = new Intent();
 										intent.setAction("com.qscftyjm.calendar.HAS_NEW_MSG");
