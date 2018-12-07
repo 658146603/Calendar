@@ -50,7 +50,7 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 	private LinearLayout linear[]=new LinearLayout[4];
 	private EditText et_send_msg;
 	private ListView list_msg;
-	ArrayList<Map<String, Object>> msgData;
+	ArrayList<Map<String, Object>> msgData=new ArrayList<Map<String, Object>>();;
 	MsgListAdapter msgListAdapter;
 	private static ArrayList<Map<String, Object>> availableAccount = new ArrayList<Map<String, Object>>();
 	private static String chooseAccount = null;
@@ -98,14 +98,14 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 //			startService(startGetglobalMsg);
 //		}
 		
-		msgReceiver=new MsgReceiver();
-		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction("com.qscftyjm.calendar.HAS_NEW_MSG");
-		registerReceiver(msgReceiver, intentFilter);
-		msgReceiver.setMessage(this);
-		
-		Intent startGetglobalMsg=new Intent(MainActivity.this, GetGlobalMsgService.class);
-		startService(startGetglobalMsg);
+//		msgReceiver=new MsgReceiver();
+//		IntentFilter intentFilter = new IntentFilter();
+//		intentFilter.addAction("com.qscftyjm.calendar.HAS_NEW_MSG");
+//		registerReceiver(msgReceiver, intentFilter);
+//		msgReceiver.setMessage(this);
+//		
+//		Intent startGetglobalMsg=new Intent(MainActivity.this, GetGlobalMsgService.class);
+//		startService(startGetglobalMsg);
 		
 		dbHelper=new SQLiteHelper(MainActivity.this, "calendar.db", null, SQLiteHelper.DB_VERSION);
 		database = dbHelper.getWritableDatabase();
@@ -178,10 +178,10 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 				} while(cursor.moveToNext());
 				cursor.close();
 				
-				msgData=new ArrayList<Map<String, Object>>();
+				
 				
 				Map<String, Object> msg=new HashMap<String, Object>();
-				msg.put("time", "现在没有消息哦");
+				msg.put("time", "没有更多消息了哦");
 				msg.put("content", "");
 				msg.put("account", "");
 				msg.put("username", "");
@@ -263,7 +263,14 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 		}
 		
 		
+		msgReceiver=new MsgReceiver();
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction("com.qscftyjm.calendar.HAS_NEW_MSG");
+		registerReceiver(msgReceiver, intentFilter);
+		msgReceiver.setMessage(this);
 		
+		Intent startGetglobalMsg=new Intent(MainActivity.this, GetGlobalMsgService.class);
+		startService(startGetglobalMsg);
 		
 		
 		button1.setOnClickListener(new OnClickListener() {
@@ -539,7 +546,10 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 					values.put("content", newObj.get("Content").toString());
 					database.insert("message", null, values);
 				}
-				msgListAdapter.notifyDataSetChanged();
+				if(msgListAdapter!=null) {
+					msgListAdapter.notifyDataSetChanged();
+				}
+				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
