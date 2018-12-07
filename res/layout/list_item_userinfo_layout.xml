@@ -26,7 +26,7 @@
 
 	        <TextView
 	            android:id="@+id/user_account"
-	            android:layout_width="wrap_content"
+	            android:layout_width="150dp"
 	            android:layout_height="30dp"
 	            android:layout_toRightOf="@+id/user_username"
 	            android:ellipsize="end"
@@ -37,7 +37,7 @@
 
 	        <TextView
 	            android:id="@+id/user_username"
-	            android:layout_width="wrap_content"
+	            android:layout_width="150dp"
 	            android:layout_height="30dp"
 	            android:layout_alignParentLeft="true"
 	            android:ellipsize="end"

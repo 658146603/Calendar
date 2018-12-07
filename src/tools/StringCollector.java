@@ -9,13 +9,13 @@ public class StringCollector {
 	public final static String MessagePost  = "http://101.132.122.143:8080/CalendarServer/MessagePost";
 	
 	public static String GetServer() {
-		return CalendarPostLocal;
+		return CalendarPost;
 	}
 	public static String GetServer(String tool) {
 		// TODO Auto-generated method stub
 		switch (tool) {
 		case "message":
-			return  MessagePostLocal;
+			return  MessagePost;
 			
 		}
 		return MessagePostLocal;

@@ -370,14 +370,14 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 				}
 				if(chooseAccount!=null) {
 					if(Password!=null) {
-						Map<String, Object> item=new HashMap<String, Object>();
-						item.put("time", TimeUtil.getTime());
-						item.put("content", Content);
-						item.put("account", chooseAccount);
-						item.put("username", "null");
-						msgData.add(item);
-						msgListAdapter.notifyDataSetChanged();
-						list_msg.setSelection(list_msg.getCount()-1);
+//						Map<String, Object> item=new HashMap<String, Object>();
+//						item.put("time", TimeUtil.getTime());
+//						item.put("content", Content);
+//						item.put("account", chooseAccount);
+//						item.put("username", "null");
+//						msgData.add(item);
+//						msgListAdapter.notifyDataSetChanged();
+//						list_msg.setSelection(list_msg.getCount()-1);
 						AsynNetUtils.post(StringCollector.GetServer("message"), ParamToJSON.formSendGlobalMsgJson(chooseAccount, Password, Content), new Callback() {
 
 							@Override
@@ -546,8 +546,9 @@ public class MainActivity extends Activity implements MsgReceiver.Message{
 					values.put("content", newObj.get("Content").toString());
 					database.insert("message", null, values);
 				}
-				if(msgListAdapter!=null) {
+				if(msgListAdapter!=null&&list_msg!=null) {
 					msgListAdapter.notifyDataSetChanged();
+					list_msg.setSelection(list_msg.getCount()-1);
 				}
 				
 			} catch (JSONException e) {
