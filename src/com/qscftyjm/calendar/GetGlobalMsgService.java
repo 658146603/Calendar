@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.IBinder;
-import android.widget.Toast;
 import postutil.AsynTaskUtil.AsynNetUtils;
 import postutil.AsynTaskUtil.AsynNetUtils.Callback;
 import sqliteutil.SQLiteHelper;
@@ -57,6 +56,7 @@ public class GetGlobalMsgService extends Service {
 				if(cursor.moveToFirst()) {
 					lastId=cursor.getInt(0);
 				}
+				cursor.close();
 				AsynNetUtils.post(StringCollector.GetServer("message"), ParamToJSON.formGetGlobalMsgJson(lastId), new Callback() {
 
 					@Override
